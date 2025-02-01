@@ -33,6 +33,7 @@ import themeConfig from '@configs/themeConfig';
 // Hook Imports
 import { useImageVariant } from '@core/hooks/useImageVariant';
 import { useSettings } from '@core/hooks/useSettings';
+import Image from 'next/image';
 
 const LoginV2 = ({ mode }: { mode: Mode }) => {
   // States
@@ -72,7 +73,7 @@ const LoginV2 = ({ mode }: { mode: Mode }) => {
         )}
       >
         <div className='plb-12 pis-12'>
-          <img
+          <Image
             src={characterIllustration}
             alt='character-illustration'
             className='max-bs-[500px] max-is-full bs-auto'

@@ -12,6 +12,7 @@ import type { Mode } from '@core/types';
 
 // Hook Imports
 import { useImageVariant } from '@core/hooks/useImageVariant';
+import Image from 'next/image';
 
 type ImageObj = {
   src: string;
@@ -57,7 +58,7 @@ const Illustrations = (props: IllustrationsProp) => {
     return (
       <>
         {typeof image1 === 'undefined' || isImageObj(image1) ? (
-          <img
+          <Image
             alt={image1?.alt || 'tree-1'}
             src={image1?.src || '/images/illustrations/objects/tree-1.png'}
             className={image1?.className || 'absolute inline-start-0 block-end-0'}
@@ -79,7 +80,7 @@ const Illustrations = (props: IllustrationsProp) => {
           maskImg
         )}
         {typeof image2 === 'undefined' || isImageObj(image2) ? (
-          <img
+          <Image
             alt={image2?.alt || 'tree-2'}
             src={image2?.src || '/images/illustrations/objects/tree-2.png'}
             className={image2?.className || 'absolute inline-end-0 block-end-0'}

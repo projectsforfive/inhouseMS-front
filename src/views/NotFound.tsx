@@ -15,6 +15,7 @@ import Illustrations from '@components/Illustrations';
 
 // Hook Imports
 import { useImageVariant } from '@core/hooks/useImageVariant';
+import Image from 'next/image';
 
 const NotFound = ({ mode }: { mode: Mode }) => {
   // Vars
@@ -34,7 +35,7 @@ const NotFound = ({ mode }: { mode: Mode }) => {
           <Typography variant='h4'>Page Not Found ⚠️</Typography>
           <Typography>We couldn&#39;t find the page you are looking for.</Typography>
         </div>
-        <img
+        <Image
           alt='error-illustration'
           src='/images/illustrations/characters/5.png'
           className='object-cover bs-[400px] md:bs-[450px] lg:bs-[500px]'

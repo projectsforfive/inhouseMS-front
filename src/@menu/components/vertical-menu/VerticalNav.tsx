@@ -32,6 +32,7 @@ import styles from '../../styles/vertical/verticalNavBgImage.module.css';
 
 // Default Config Imports
 import { defaultBreakpoints, verticalNavToggleDuration } from '../../defaultConfigs';
+import Image from 'next/image';
 
 export type VerticalNavProps = HTMLAttributes<HTMLHtmlElement> & {
   width?: VerticalNavState['width'];
@@ -218,7 +219,7 @@ const VerticalNav = (props: VerticalNavProps) => {
         {backgroundImage && (
           // eslint-disable-next-line lines-around-comment
           /* VerticalNav Background Image */
-          <img
+          <Image
             className={classnames(verticalNavClasses.image, styles.root)}
             src={backgroundImage}
             alt='verticalNav background'
