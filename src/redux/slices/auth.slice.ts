@@ -23,11 +23,11 @@ export const authSlice = createSlice({
     setUser: (state, action: PayloadAction<any>) => {
       state.user = action.payload;
     },
-    logOut: (state) => {
+    logOut: state => {
       state.isAuthenticated = false;
       state.user = null;
     }
-  },
+  }
   // extraReducers: builder => {}
 });
 
