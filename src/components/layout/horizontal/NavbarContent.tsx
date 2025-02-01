@@ -1,22 +1,21 @@
-'use client'
+'use client';
 
 // Third-party Imports
-import classnames from 'classnames'
+import classnames from 'classnames';
 
 // Component Imports
-import NavToggle from './NavToggle'
-import Logo from '@components/layout/shared/Logo'
-import ModeDropdown from '@components/layout/shared/ModeDropdown'
-import UserDropdown from '@components/layout/shared/UserDropdown'
-import NotificationsDropdown from '@components/layout/shared/NotificationsDropdown'
+import NavToggle from './NavToggle';
+import Logo from '@components/layout/shared/Logo';
+import ModeDropdown from '@components/layout/shared/ModeDropdown';
+import UserDropdown from '@components/layout/shared/UserDropdown';
+import NotificationsDropdown from '@components/layout/shared/NotificationsDropdown';
 
 // Hook Imports
-import useHorizontalNav from '@menu/hooks/useHorizontalNav'
+import useHorizontalNav from '@menu/hooks/useHorizontalNav';
 
 // Util Imports
-import { horizontalLayoutClasses } from '@layouts/utils/layoutClasses'
-import type { NotificationsType } from '@components/layout/shared/NotificationsDropdown'
-
+import { horizontalLayoutClasses } from '@layouts/utils/layoutClasses';
+import type { NotificationsType } from '@components/layout/shared/NotificationsDropdown';
 
 const notifications: NotificationsType[] = [
   {
@@ -63,11 +62,11 @@ const notifications: NotificationsType[] = [
     time: 'Jan 6, 1:48 PM',
     read: true
   }
-]
+];
 
 const NavbarContent = () => {
   // Hooks
-  const { isBreakpointReached } = useHorizontalNav()
+  const { isBreakpointReached } = useHorizontalNav();
 
   return (
     <div
@@ -84,7 +83,7 @@ const NavbarContent = () => {
         <UserDropdown />
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default NavbarContent
+export default NavbarContent;

@@ -1,9 +1,9 @@
-'use client'
+'use client';
 
-import { useSelector } from "react-redux"
+import { useSelector } from 'react-redux';
 
 const Dashboard = () => {
-  return <h1>Dashboard</h1>
-}
+  return <h1>Dashboard</h1>;
+};
 
-export default Dashboard
+export default Dashboard;

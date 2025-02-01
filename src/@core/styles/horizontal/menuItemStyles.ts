@@ -1,12 +1,12 @@
 // MUI Imports
-import { lighten } from '@mui/material/styles'
-import type { Theme } from '@mui/material/styles'
+import { lighten } from '@mui/material/styles';
+import type { Theme } from '@mui/material/styles';
 
 // Type Imports
-import type { MenuItemStyles } from '@menu/types'
+import type { MenuItemStyles } from '@menu/types';
 
 // Util Imports
-import { menuClasses } from '@menu/utils/menuClasses'
+import { menuClasses } from '@menu/utils/menuClasses';
 
 const menuItemStyles = (theme: Theme, iconClass: string): MenuItemStyles => ({
   root: ({ level }) => ({
@@ -106,6 +106,6 @@ const menuItemStyles = (theme: Theme, iconClass: string): MenuItemStyles => ({
       paddingBlock: theme.spacing(2)
     }
   }
-})
+});
 
-export default menuItemStyles
+export default menuItemStyles;

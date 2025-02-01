@@ -1,35 +1,35 @@
 // Type Imports
-import type { Mode, Skin, Layout, LayoutComponentPosition, LayoutComponentWidth } from '@core/types'
+import type { Mode, Skin, Layout, LayoutComponentPosition, LayoutComponentWidth } from '@core/types';
 
 type Navbar = {
-  type: LayoutComponentPosition
-  contentWidth: LayoutComponentWidth
-  floating: boolean
-  detached: boolean
-  blur: boolean
-}
+  type: LayoutComponentPosition;
+  contentWidth: LayoutComponentWidth;
+  floating: boolean;
+  detached: boolean;
+  blur: boolean;
+};
 
 type Footer = {
-  type: LayoutComponentPosition
-  contentWidth: LayoutComponentWidth
-  detached: boolean
-}
+  type: LayoutComponentPosition;
+  contentWidth: LayoutComponentWidth;
+  detached: boolean;
+};
 
 export type Config = {
-  templateName: string
-  homePageUrl: string
-  settingsCookieName: string
-  mode: Mode
-  skin: Skin
-  semiDark: boolean
-  layout: Layout
-  layoutPadding: number
-  navbar: Navbar
-  contentWidth: LayoutComponentWidth
-  compactContentWidth: number
-  footer: Footer
-  disableRipple: boolean
-}
+  templateName: string;
+  homePageUrl: string;
+  settingsCookieName: string;
+  mode: Mode;
+  skin: Skin;
+  semiDark: boolean;
+  layout: Layout;
+  layoutPadding: number;
+  navbar: Navbar;
+  contentWidth: LayoutComponentWidth;
+  compactContentWidth: number;
+  footer: Footer;
+  disableRipple: boolean;
+};
 
 const themeConfig: Config = {
   templateName: 'Materio',
@@ -55,6 +55,6 @@ const themeConfig: Config = {
     detached: true //! true, false (This will not work in the Horizontal Layout)
   },
   disableRipple: false // true, false
-}
+};
 
-export default themeConfig
+export default themeConfig;

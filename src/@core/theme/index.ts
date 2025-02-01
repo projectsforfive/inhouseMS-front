@@ -1,22 +1,22 @@
 // Next Imports
-import { Inter } from 'next/font/google'
+import { Inter } from 'next/font/google';
 
 // MUI Imports
-import type { Theme } from '@mui/material/styles'
+import type { Theme } from '@mui/material/styles';
 
 // Type Imports
-import type { Settings } from '@core/contexts/settingsContext'
-import type { Skin, SystemMode } from '@core/types'
+import type { Settings } from '@core/contexts/settingsContext';
+import type { Skin, SystemMode } from '@core/types';
 
 // Theme Options Imports
-import overrides from './overrides'
-import colorSchemes from './colorSchemes'
-import spacing from './spacing'
-import shadows from './shadows'
-import customShadows from './customShadows'
-import typography from './typography'
+import overrides from './overrides';
+import colorSchemes from './colorSchemes';
+import spacing from './spacing';
+import shadows from './shadows';
+import customShadows from './customShadows';
+import typography from './typography';
 
-const inter = Inter({ subsets: ['latin'], weight: ['300', '400', '500', '600', '700', '800', '900'] })
+const inter = Inter({ subsets: ['latin'], weight: ['300', '400', '500', '600', '700', '800', '900'] });
 
 const theme = (settings: Settings, mode: SystemMode, direction: Theme['direction']): Theme => {
   return {
@@ -43,7 +43,7 @@ const theme = (settings: Settings, mode: SystemMode, direction: Theme['direction
       lightShadow: '46 38 61',
       darkShadow: '19 17 32'
     }
-  } as Theme
-}
+  } as Theme;
+};
 
-export default theme
+export default theme;

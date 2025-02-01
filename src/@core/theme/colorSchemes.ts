@@ -1,8 +1,8 @@
 // MUI Imports
-import type { Theme } from '@mui/material/styles'
+import type { Theme } from '@mui/material/styles';
 
 // Type Imports
-import type { Skin } from '@core/types'
+import type { Skin } from '@core/types';
 
 const colorSchemes = (skin: Skin): Theme['colorSchemes'] => {
   return {
@@ -324,7 +324,7 @@ const colorSchemes = (skin: Skin): Theme['colorSchemes'] => {
         }
       }
     }
-  } as Theme['colorSchemes']
-}
+  } as Theme['colorSchemes'];
+};
 
-export default colorSchemes
+export default colorSchemes;

@@ -1,55 +1,55 @@
-'use client'
+'use client';
 
 // React Imports
-import { useState } from 'react'
+import { useState } from 'react';
 
 // Next Imports
-import { useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation';
 
 // MUI Imports
-import Typography from '@mui/material/Typography'
-import TextField from '@mui/material/TextField'
-import IconButton from '@mui/material/IconButton'
-import InputAdornment from '@mui/material/InputAdornment'
-import Checkbox from '@mui/material/Checkbox'
-import Button from '@mui/material/Button'
-import FormControlLabel from '@mui/material/FormControlLabel'
-import Divider from '@mui/material/Divider'
+import Typography from '@mui/material/Typography';
+import TextField from '@mui/material/TextField';
+import IconButton from '@mui/material/IconButton';
+import InputAdornment from '@mui/material/InputAdornment';
+import Checkbox from '@mui/material/Checkbox';
+import Button from '@mui/material/Button';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Divider from '@mui/material/Divider';
 
 // Third-party Imports
-import classnames from 'classnames'
+import classnames from 'classnames';
 
 // Type Imports
-import type { Mode } from '@core/types'
+import type { Mode } from '@core/types';
 
 // Component Imports
-import Link from '@components/Link'
-import Logo from '@components/layout/shared/Logo'
-import Illustrations from '@components/Illustrations'
+import Link from '@components/Link';
+import Logo from '@components/layout/shared/Logo';
+import Illustrations from '@components/Illustrations';
 
 // Config Imports
-import themeConfig from '@configs/themeConfig'
+import themeConfig from '@configs/themeConfig';
 
 // Hook Imports
-import { useImageVariant } from '@core/hooks/useImageVariant'
-import { useSettings } from '@core/hooks/useSettings'
+import { useImageVariant } from '@core/hooks/useImageVariant';
+import { useSettings } from '@core/hooks/useSettings';
 
 const LoginV2 = ({ mode }: { mode: Mode }) => {
   // States
-  const [isPasswordShown, setIsPasswordShown] = useState(false)
+  const [isPasswordShown, setIsPasswordShown] = useState(false);
 
   // Vars
-  const darkImg = '/images/pages/auth-v2-mask-dark.png'
-  const lightImg = '/images/pages/auth-v2-mask-light.png'
-  const darkIllustration = '/images/illustrations/auth/v2-login-dark.png'
-  const lightIllustration = '/images/illustrations/auth/v2-login-light.png'
-  const borderedDarkIllustration = '/images/illustrations/auth/v2-login-dark-border.png'
-  const borderedLightIllustration = '/images/illustrations/auth/v2-login-light-border.png'
+  const darkImg = '/images/pages/auth-v2-mask-dark.png';
+  const lightImg = '/images/pages/auth-v2-mask-light.png';
+  const darkIllustration = '/images/illustrations/auth/v2-login-dark.png';
+  const lightIllustration = '/images/illustrations/auth/v2-login-light.png';
+  const borderedDarkIllustration = '/images/illustrations/auth/v2-login-dark-border.png';
+  const borderedLightIllustration = '/images/illustrations/auth/v2-login-light-border.png';
 
   // Hooks
-  const router = useRouter()
-  const { settings } = useSettings()
-  const authBackground = useImageVariant(mode, lightImg, darkImg)
+  const router = useRouter();
+  const { settings } = useSettings();
+  const authBackground = useImageVariant(mode, lightImg, darkImg);
 
   const characterIllustration = useImageVariant(
     mode,
@@ -57,9 +57,9 @@ const LoginV2 = ({ mode }: { mode: Mode }) => {
     darkIllustration,
     borderedLightIllustration,
     borderedDarkIllustration
-  )
+  );
 
-  const handleClickShowPassword = () => setIsPasswordShown(show => !show)
+  const handleClickShowPassword = () => setIsPasswordShown(show => !show);
 
   return (
     <div className='flex bs-full justify-center'>
@@ -97,8 +97,8 @@ const LoginV2 = ({ mode }: { mode: Mode }) => {
             noValidate
             autoComplete='off'
             onSubmit={e => {
-              e.preventDefault()
-              router.push('/')
+              e.preventDefault();
+              router.push('/');
             }}
             className='flex flex-col gap-5'
           >
@@ -156,7 +156,7 @@ const LoginV2 = ({ mode }: { mode: Mode }) => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default LoginV2
+export default LoginV2;

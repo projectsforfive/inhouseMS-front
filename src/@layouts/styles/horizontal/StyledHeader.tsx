@@ -1,20 +1,20 @@
 // MUI Imports
-import type { Theme } from '@mui/material/styles'
+import type { Theme } from '@mui/material/styles';
 
 // Third-party Imports
-import styled from '@emotion/styled'
-import type { CSSObject } from '@emotion/styled'
+import styled from '@emotion/styled';
+import type { CSSObject } from '@emotion/styled';
 
 // Config Imports
-import themeConfig from '@configs/themeConfig'
+import themeConfig from '@configs/themeConfig';
 
 // Util Imports
-import { horizontalLayoutClasses } from '@layouts/utils/layoutClasses'
+import { horizontalLayoutClasses } from '@layouts/utils/layoutClasses';
 
 type StyledHeaderProps = {
-  theme: Theme
-  overrideStyles?: CSSObject
-}
+  theme: Theme;
+  overrideStyles?: CSSObject;
+};
 
 const StyledHeader = styled.header<StyledHeaderProps>`
   box-shadow: 0 4px 8px -4px rgb(var(--mui-mainColorChannels-shadow) / 0.42);
@@ -52,6 +52,6 @@ const StyledHeader = styled.header<StyledHeaderProps>`
   }
 
   ${({ overrideStyles }) => overrideStyles}
-`
+`;
 
-export default StyledHeader
+export default StyledHeader;

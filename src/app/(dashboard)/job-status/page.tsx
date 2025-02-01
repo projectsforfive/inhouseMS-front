@@ -1,6 +1,5 @@
-import JobStatus from "@/views/job-status"
-
+import JobStatus from '@/views/job-status';
 
 export default function Page() {
-  return <JobStatus />
+  return <JobStatus />;
 }

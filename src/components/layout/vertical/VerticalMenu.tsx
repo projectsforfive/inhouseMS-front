@@ -1,52 +1,52 @@
 // MUI Imports
-import { useTheme } from '@mui/material/styles'
+import { useTheme } from '@mui/material/styles';
 
 // Third-party Imports
-import PerfectScrollbar from 'react-perfect-scrollbar'
+import PerfectScrollbar from 'react-perfect-scrollbar';
 
 // Type Imports
-import type { VerticalMenuContextProps } from '@menu/components/vertical-menu/Menu'
+import type { VerticalMenuContextProps } from '@menu/components/vertical-menu/Menu';
 
 // Component Imports
-import { Menu, SubMenu, MenuItem } from '@menu/vertical-menu'
+import { Menu, SubMenu, MenuItem } from '@menu/vertical-menu';
 
 // Hook Imports
-import useVerticalNav from '@menu/hooks/useVerticalNav'
+import useVerticalNav from '@menu/hooks/useVerticalNav';
 
 // Styled Component Imports
-import StyledVerticalNavExpandIcon from '@menu/styles/vertical/StyledVerticalNavExpandIcon'
+import StyledVerticalNavExpandIcon from '@menu/styles/vertical/StyledVerticalNavExpandIcon';
 
 // Style Imports
-import menuItemStyles from '@core/styles/vertical/menuItemStyles'
-import menuSectionStyles from '@core/styles/vertical/menuSectionStyles'
+import menuItemStyles from '@core/styles/vertical/menuItemStyles';
+import menuSectionStyles from '@core/styles/vertical/menuSectionStyles';
 
 import { FaAmazonPay } from 'react-icons/fa';
-import { FiCommand } from "react-icons/fi";
+import { FiCommand } from 'react-icons/fi';
 
 type RenderExpandIconProps = {
-  open?: boolean
-  transitionDuration?: VerticalMenuContextProps['transitionDuration']
-}
+  open?: boolean;
+  transitionDuration?: VerticalMenuContextProps['transitionDuration'];
+};
 
 type Props = {
-  scrollMenu: (container: any, isPerfectScrollbar: boolean) => void
-}
+  scrollMenu: (container: any, isPerfectScrollbar: boolean) => void;
+};
 
 const RenderExpandIcon = ({ open, transitionDuration }: RenderExpandIconProps) => (
   <StyledVerticalNavExpandIcon open={open} transitionDuration={transitionDuration}>
     <i className='ri-arrow-right-s-line' />
   </StyledVerticalNavExpandIcon>
-)
+);
 
 const VerticalMenu = ({ scrollMenu }: Props) => {
   // Hooks
-  const theme = useTheme()
-  const verticalNavOptions = useVerticalNav()
+  const theme = useTheme();
+  const verticalNavOptions = useVerticalNav();
 
   // Vars
-  const { isBreakpointReached, transitionDuration } = verticalNavOptions
+  const { isBreakpointReached, transitionDuration } = verticalNavOptions;
 
-  const ScrollWrapper = isBreakpointReached ? 'div' : PerfectScrollbar
+  const ScrollWrapper = isBreakpointReached ? 'div' : PerfectScrollbar;
 
   return (
     // eslint-disable-next-line lines-around-comment
@@ -54,13 +54,13 @@ const VerticalMenu = ({ scrollMenu }: Props) => {
     <ScrollWrapper
       {...(isBreakpointReached
         ? {
-          className: 'bs-full overflow-y-auto overflow-x-hidden',
-          onScroll: container => scrollMenu(container, false)
-        }
+            className: 'bs-full overflow-y-auto overflow-x-hidden',
+            onScroll: container => scrollMenu(container, false)
+          }
         : {
-          options: { wheelPropagation: false, suppressScrollX: true },
-          onScrollY: container => scrollMenu(container, true)
-        })}
+            options: { wheelPropagation: false, suppressScrollX: true },
+            onScrollY: container => scrollMenu(container, true)
+          })}
     >
       {/* Incase you also want to scroll NavHeader to scroll with Vertical Menu, remove NavHeader from above and paste it below this comment */}
       {/* Vertical Menu */}
@@ -85,7 +85,7 @@ const VerticalMenu = ({ scrollMenu }: Props) => {
         </MenuItem>
       </Menu>
     </ScrollWrapper>
-  )
-}
+  );
+};
 
-export default VerticalMenu
+export default VerticalMenu;
