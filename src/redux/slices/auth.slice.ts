@@ -23,12 +23,12 @@ export const authSlice = createSlice({
     setUser: (state, action: PayloadAction<any>) => {
       state.user = action.payload;
     },
-    logOut: (state, action: PayloadAction<any>) => {
+    logOut: (state) => {
       state.isAuthenticated = false;
       state.user = null;
     }
   },
-  extraReducers: builder => {}
+  // extraReducers: builder => {}
 });
 
 export const { setAuthenticated, setUser } = authSlice.actions;

@@ -1,7 +1,7 @@
 'use client';
 
 // React Imports
-import { useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import type { HTMLAttributes } from 'react';
 
 // Third-party Imports

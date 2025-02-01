@@ -3,10 +3,6 @@
 // React Imports
 import { useRef, useState } from 'react';
 
-// Next Imports
-import { usePathname } from 'next/navigation';
-import Link from 'next/link';
-
 // MUI Imports
 import Chip from '@mui/material/Chip';
 import Fade from '@mui/material/Fade';
@@ -36,8 +32,6 @@ import LayoutCollapsed from '@core/svg/LayoutCollapsed';
 import LayoutHorizontal from '@core/svg/LayoutHorizontal';
 import ContentCompact from '@core/svg/ContentCompact';
 import ContentWide from '@core/svg/ContentWide';
-import DirectionLtr from '@core/svg/DirectionLtr';
-import DirectionRtl from '@core/svg/DirectionRtl';
 
 // Config Imports
 import primaryColorConfig from '@configs/primaryColorConfig';
@@ -54,14 +48,14 @@ type CustomizerProps = {
   disableDirection?: boolean;
 };
 
-const getLocalePath = (pathName: string, locale: string) => {
-  if (!pathName) return '/';
-  const segments = pathName.split('/');
+// const getLocalePath = (pathName: string, locale: string) => {
+//   if (!pathName) return '/';
+//   const segments = pathName.split('/');
 
-  segments[1] = locale;
+//   segments[1] = locale;
 
-  return segments.join('/');
-};
+//   return segments.join('/');
+// };
 
 type DebouncedColorPickerProps = {
   settings: Settings;
@@ -96,7 +90,7 @@ const DebouncedColorPicker = (props: DebouncedColorPickerProps) => {
   );
 };
 
-const Customizer = ({ breakpoint = 'lg', dir = 'ltr', disableDirection = false }: CustomizerProps) => {
+const Customizer = ({ breakpoint = 'lg', dir = 'ltr' }: CustomizerProps) => {
   // States
   const [isOpen, setIsOpen] = useState(false);
   const [direction, setDirection] = useState(dir);
@@ -107,7 +101,6 @@ const Customizer = ({ breakpoint = 'lg', dir = 'ltr', disableDirection = false }
 
   // Hooks
   const theme = useTheme();
-  const pathName = usePathname();
   const { settings, updateSettings, resetSettings, isSettingsChanged } = useSettings();
   const isSystemDark = useMedia('(prefers-color-scheme: dark)', false);
 
