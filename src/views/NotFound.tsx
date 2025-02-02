@@ -39,6 +39,8 @@ const NotFound = ({ mode }: { mode: Mode }) => {
           alt='error-illustration'
           src='/images/illustrations/characters/5.png'
           className='object-cover bs-[400px] md:bs-[450px] lg:bs-[500px]'
+          width={400}
+          height={400}
         />
         <Button href='/dashboard' component={Link} variant='contained'>
           Back to Home
