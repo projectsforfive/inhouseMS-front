@@ -79,11 +79,11 @@ const LoginV2 = ({ mode }: { mode: Mode }) => {
             className='max-bs-[500px] max-is-full bs-auto'
           />
         </div>
-        <Illustrations
-          image1={{ src: '/images/illustrations/objects/tree-2.png' }}
+        {/* <Illustrations
+          image1={{ src: '/tree-3.png' }}
           image2={null}
           maskImg={{ src: authBackground }}
-        />
+        /> */}
       </div>
       <div className='flex justify-center items-center bs-full bg-backgroundPaper !min-is-full p-6 md:!min-is-[unset] md:p-12 md:is-[480px]'>
         <Link className='absolute block-start-5 sm:block-start-[38px] inline-start-6 sm:inline-start-[38px]'>
