@@ -46,7 +46,7 @@ import type { PaymentType } from '@/types/paymentTypes'
 
 // Component Imports
 import TableFilters from './TableFilters'
-import AddUserDrawer from './PaymentRequests'
+import AddUserDrawer from './PaymentRequestsDrawer'
 import OptionMenu from '@core/components/option-menu'
 import CustomAvatar from '@core/components/mui/Avatar'
 
@@ -57,6 +57,11 @@ import { getInitials } from '@/utils/getInitials'
 // Style Imports
 import tableStyles from '@core/styles/table.module.css'
 
+// income and expense
+import { useSelector } from 'react-redux'
+import { RootState } from '@/redux/index'
+
+
 declare module '@tanstack/table-core' {
     interface FilterFns {
         fuzzy: FilterFn<unknown>
@@ -66,13 +71,7 @@ declare module '@tanstack/table-core' {
     }
 }
 
-type UsersTypeWithAction = PaymentType & {
-    action?: string
-}
-
-type UserRoleType = {
-    [key: string]: { icon: string; color: string }
-}
+type UsersTypeWithAction = PaymentType 
 
 type UserStatusType = {
     [key: string]: ThemeColor
@@ -123,25 +122,18 @@ const DebouncedInput = ({
     return <TextField {...props} value={value} onChange={e => setValue(e.target.value)} size='small' />
 }
 
-// Vars
-const userRoleObj: UserRoleType = {
-    admin: { icon: 'ri-vip-crown-line', color: 'error' },
-    author: { icon: 'ri-computer-line', color: 'warning' },
-    editor: { icon: 'ri-edit-box-line', color: 'info' },
-    maintainer: { icon: 'ri-pie-chart-2-line', color: 'success' },
-    subscriber: { icon: 'ri-user-3-line', color: 'primary' }
-}
 
 const userStatusObj: UserStatusType = {
-    active: 'success',
+    success: 'success',
     pending: 'warning',
-    inactive: 'secondary'
+    failed: 'secondary'
 }
 
 // Column Definitions
 const columnHelper = createColumnHelper<UsersTypeWithAction>()
 
 const UserListTable = ({ tableData }: { tableData?: PaymentType[] }) => {
+    const { totalAmount } = useSelector((state: RootState) => state.payment)
     // States
     const [addUserOpen, setAddUserOpen] = useState(false)
     const [rowSelection, setRowSelection] = useState({})
@@ -154,7 +146,6 @@ const UserListTable = ({ tableData }: { tableData?: PaymentType[] }) => {
 
     const columns = useMemo<ColumnDef<UsersTypeWithAction, any>[]>(
         () => [
-           
             columnHelper.accessor('date', {
                 header: 'Date',
                 cell: ({ row }) => (
@@ -231,27 +222,12 @@ const UserListTable = ({ tableData }: { tableData?: PaymentType[] }) => {
             columnHelper.accessor('action', {
                 header: 'Action',
                 cell: ({ row }) => (
+                    
                   <div className='flex items-center'>
-                    <IconButton onClick={() => setData(data?.filter(product => product.id !== row.original.id))}>
+                    <IconButton disabled={!row.original.action} onClick={() => setData(data?.filter(product => product.id !== row.original.id))}>
                       <i className='ri-delete-bin-7-line text-textSecondary' />
                     </IconButton>
-                    
-                    <OptionMenu
-                      iconButtonProps={{ size: 'medium' }}
-                      iconClassName='text-textSecondary'
-                      options={[
-                        {
-                          text: 'Download',
-                          icon: 'ri-download-line',
-                          menuItemProps: { className: 'flex items-center gap-2 text-textSecondary' }
-                        },
-                        {
-                          text: 'Edit',
-                          icon: 'ri-edit-box-line',
-                          menuItemProps: { className: 'flex items-center gap-2 text-textSecondary' }
-                        }
-                      ]}
-                    />
+                    <IconButton disabled={!row.original.action}><i className='ri-edit-box-line text-textSecondary' /></IconButton>
                   </div>
                 ),
                 enableSorting: false
@@ -267,13 +243,13 @@ const UserListTable = ({ tableData }: { tableData?: PaymentType[] }) => {
                     </div>
                 )
             }),
-            columnHelper.accessor('IO', {
+            columnHelper.accessor('io', {
                 header: 'I/O',
                 cell: ({ row }) => (
                     <div className='flex items-center gap-2'>
                         
                         <Typography className='capitalize' color='text.primary'>
-                            {row.original.IO}
+                            {row.original.io}
                         </Typography>
                     </div>
                 )
@@ -313,35 +289,22 @@ const UserListTable = ({ tableData }: { tableData?: PaymentType[] }) => {
         getFacetedMinMaxValues: getFacetedMinMaxValues()
     })
 
-    // const getAvatar = (params: Pick<PaymentType, 'avatar' | 'fullName'>) => {
-    //   const { avatar, fullName } = params
-
-    //   if (avatar) {
-    //     return <CustomAvatar src={avatar} skin='light' size={34} />
-    //   } else {
-    //     return (
-    //       <CustomAvatar skin='light' size={34}>
-    //         {getInitials(fullName as string)}
-    //       </CustomAvatar>
-    //     )
-    //   }
-    // }
-
+    
     return (
         <>
             <Card>
-                <CardHeader title='Filters' />
-                <TableFilters setData={setFilteredData} tableData={data} />
+                <CardHeader title='Payment History' />
+                {/* <TableFilters setData={setFilteredData} tableData={data} /> */}
                 <Divider />
                 <div className='flex justify-between p-5 gap-4 flex-col items-start sm:flex-row sm:items-center'>
-                    <Button
+                    <div
                         color='secondary'
                         variant='outlined'
                         startIcon={<i className='ri-upload-2-line text-xl' />}
                         className='max-sm:is-full'
                     >
-                        Export
-                    </Button>
+                        Total (In/Out) : ${totalAmount.income} / ${totalAmount.expense}
+                    </div>
                     <div className='flex items-center gap-x-4 gap-4 flex-col max-sm:is-full sm:flex-row'>
                         <DebouncedInput
                             value={globalFilter ?? ''}
@@ -428,7 +391,7 @@ const UserListTable = ({ tableData }: { tableData?: PaymentType[] }) => {
             <AddUserDrawer
                 open={addUserOpen}
                 handleClose={() => setAddUserOpen(!addUserOpen)}
-                userData={data}
+                usrData={data}
                 setData={setData}
             />
         </>

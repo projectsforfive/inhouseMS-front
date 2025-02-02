@@ -3,14 +3,14 @@
 
 export type PaymentType = {
   id: number
-  date: string
+  io:'In'|'Out'
   method:'Paypal'|'Payoneer'|'Wise'|'Crypto'
+  client: string
+  date: string
   address: string
   amount: number
   country: string
-  client: string
   status: 'Pending'|'Success'|'Failed'
   action: boolean
   description: string
-  IO:'In'|'Out'
 }

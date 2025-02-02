@@ -10,7 +10,7 @@ import InputLabel from '@mui/material/InputLabel'
 import MenuItem from '@mui/material/MenuItem'
 import Select from '@mui/material/Select'
 import TextField from '@mui/material/TextField'
-import TextareaAutosize from '@mui/material/TextareaAutosize';
+import TextareaAutosize from '@mui/material/TextareaAutosize'
 import FormHelperText from '@mui/material/FormHelperText'
 import Typography from '@mui/material/Typography'
 import Divider from '@mui/material/Divider'
@@ -20,40 +20,41 @@ import Divider from '@mui/material/Divider'
 import { useForm, Controller } from 'react-hook-form'
 
 // Types Imports
-import type { UsersType } from '@/types/apps/userTypes'
+import type { PaymentType } from '@/types/paymentTypes'
+
 
 type Props = {
   open: boolean
   handleClose: () => void
-  userData?: UsersType[]
-  setData: (data: UsersType[]) => void
+  paymentData?: PaymentType[]
+  setData: (data: PaymentType[]) => void
 }
 
 type FormValidateType = {
+  io: 'In' | 'Out'
   method: 'Paypal' | 'Payoneer' | 'Wise' | 'Crypto'
-  username: string
-  email: string
-  role: string
-  plan: string
-  status: string
 }
 
 type FormNonValidateType = {
-  company: string
   country: string
-  contact: string
+  client: string
+  address: string
+  amount: number
+  description: string
 }
 
 // Vars
 const initialData = {
-  company: '',
   country: '',
-  contact: ''
+  client: '',
+  address: '',
+  amount: 0,
+  description: ''
 }
 
 const AddUserDrawer = (props: Props) => {
   // Props
-  const { open, handleClose, userData, setData } = props
+  const { open, handleClose, paymentData, setData } = props
 
   // States
   const [formData, setFormData] = useState<FormNonValidateType>(initialData)
@@ -66,34 +67,31 @@ const AddUserDrawer = (props: Props) => {
     formState: { errors }
   } = useForm<FormValidateType>({
     defaultValues: {
-      method: '',
-      username: '',
-      email: '',
-      role: '',
-      plan: '',
-      status: ''
+      io: 'In',
+      method: 'Paypal',
     }
   })
 
   const onSubmit = (data: FormValidateType) => {
-    const newUser: UsersType = {
-      id: (userData?.length && userData?.length + 1) || 1,
-      avatar: `/images/avatars/${Math.floor(Math.random() * 8) + 1}.png`,
+    const newPayment: PaymentType = {
+      id: (paymentData?.length && paymentData?.length + 1) || 1,
+      io: data.io,
       method: data.method,
-      username: data.username,
-      email: data.email,
-      role: data.role,
-      currentPlan: data.plan,
-      status: data.status,
-      company: formData.company,
+      client: formData.client,
+      date: new Date().toLocaleDateString(),
+      address: formData.address,
+      amount: formData.amount,
       country: formData.country,
-      contact: formData.contact
+      status: 'Pending',
+      action: true,
+      description: formData.description,
     }
-
-    setData([...(userData ?? []), newUser])
+    
+    console.log(newPayment)
+    // setData([...(paymentData ?? []), newPayment])
     handleClose()
     setFormData(initialData)
-    resetForm({ method: '', username: '', email: '', role: '', plan: '', status: '' })
+    resetForm({ io: 'In', method: 'Paypal'})
   }
 
   const handleReset = () => {
@@ -119,20 +117,20 @@ const AddUserDrawer = (props: Props) => {
       <Divider />
       <div className='p-5'>
         <form onSubmit={handleSubmit(data => onSubmit(data))} className='flex flex-col gap-5'>
-        <FormControl fullWidth>
-            <InputLabel id='io'>I/O</InputLabel>
-            <Select
-              fullWidth
-              id='io'
-              value={formData.io}
-              onChange={e => setFormData({ ...formData, io: e.target.value })}
-              label='I/O'
-              labelId='io'
-            >
-              <MenuItem value='IN'>IN</MenuItem>
-              <MenuItem value='OUT'>OUT</MenuItem>
-             
-            </Select>
+          <FormControl fullWidth>
+            <InputLabel id='io' error={Boolean(errors.io)}>I/O</InputLabel>
+            <Controller
+              name='io'
+              control={control}
+              rules={{ required: true }}
+              render={({ field }) => (
+                <Select label='Select I/O'  {...field} error={Boolean(errors.io)}>
+                  <MenuItem value='In'>IN</MenuItem>
+                  <MenuItem value='Out'>OUT</MenuItem>
+                </Select>
+              )}
+            />
+            {errors.io && <FormHelperText error>This field is required.</FormHelperText>}
           </FormControl>
           <FormControl fullWidth>
             <InputLabel id='method' error={Boolean(errors.method)}>
@@ -152,39 +150,35 @@ const AddUserDrawer = (props: Props) => {
               )}
               {...(errors.method && { error: true, helperText: 'This field is required.' })}
             />
-            {errors.role && <FormHelperText error>This field is required.</FormHelperText>}
+            {errors.method && <FormHelperText error>This field is required.</FormHelperText>}
           </FormControl>
 
-          <Controller
-            name='client'
-            control={control}
-            rules={{ required: true }}
-            render={({ field }) => (
-              <TextField
-                {...field}
-                fullWidth
-                label='Client'
-                placeholder=' '
-                {...(errors.client && { error: true, helperText: 'This field is required.' })}
-              />
-            )}
+          <TextField
+            fullWidth
+            label='Client'
+            type='text'
+            placeholder='client name'
+            value={formData.client}
+            onChange={e => setFormData({ ...formData, client: e.target.value })}
           />
-          <Controller
-            name='address'
-            control={control}
-            rules={{ required: true }}
-            render={({ field }) => (
-              <TextField
-                {...field}
-                fullWidth
-                label='Address'
-                placeholder=' '
-                {...(errors.address && { error: true, helperText: 'This field is required.' })}
-              />
-            )}
+
+          <TextField
+            fullWidth
+            label='Address'
+            placeholder=' '
+            value={formData.address}
+            onChange={e => setFormData({ ...formData, address: e.target.value })}
           />
-        
-          
+
+          <TextField
+            fullWidth
+            label='Amount'
+            type='number'
+            placeholder='$100'
+            value={formData.amount}
+            onChange={e => setFormData({ ...formData, amount: Number(e.target.value) })}
+          />
+
           <FormControl fullWidth>
             <InputLabel id='country'>Select Country</InputLabel>
             <Select

@@ -1,9 +1,9 @@
-import Payment from '@/views/payment/HistoryTable';
-import {db} from '@/app/server/actions';
+import Payment from '@/views/payment';
 
 const PaymentPage = async () => {
+  
   return (
-    <Payment tableData={db}  />
+    <Payment  />
   );
 };
 
