@@ -1,5 +1,10 @@
-import Payment from '@/views/payment';
+import Payment from '@/views/payment/HistoryTable';
+import {db} from '@/app/server/actions';
 
-export default function Page() {
-  return <Payment />;
-}
+const PaymentPage = async () => {
+  return (
+    <Payment tableData={db}  />
+  );
+};
+
+export default PaymentPage;
