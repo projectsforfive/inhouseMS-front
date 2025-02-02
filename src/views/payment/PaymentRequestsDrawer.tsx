@@ -1,50 +1,50 @@
 // React Imports
-import { useState } from 'react'
+import { useState } from 'react';
 
 // MUI Imports
-import Button from '@mui/material/Button'
-import Drawer from '@mui/material/Drawer'
-import FormControl from '@mui/material/FormControl'
-import IconButton from '@mui/material/IconButton'
-import InputLabel from '@mui/material/InputLabel'
-import MenuItem from '@mui/material/MenuItem'
-import Select from '@mui/material/Select'
-import TextField from '@mui/material/TextField'
-import TextareaAutosize from '@mui/material/TextareaAutosize'
-import FormHelperText from '@mui/material/FormHelperText'
-import Typography from '@mui/material/Typography'
-import Divider from '@mui/material/Divider'
+import Button from '@mui/material/Button';
+import Drawer from '@mui/material/Drawer';
+import FormControl from '@mui/material/FormControl';
+import IconButton from '@mui/material/IconButton';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
+import TextField from '@mui/material/TextField';
+import TextareaAutosize from '@mui/material/TextareaAutosize';
+import FormHelperText from '@mui/material/FormHelperText';
+import Typography from '@mui/material/Typography';
+import Divider from '@mui/material/Divider';
 
 // Third-party Imports
-import { useForm, Controller } from 'react-hook-form'
+import { useForm, Controller } from 'react-hook-form';
 
 // Types Imports
-import type { PaymentType } from '@/types/paymentTypes'
+import type { PaymentType } from '@/types/paymentTypes';
 
 //dispatch
-import { useDispatch, useSelector } from 'react-redux'
-import { addPaymentToAPI } from '@/redux/slices/payment.slice'
-import type { RootState } from '@/redux/index'
+import { useDispatch, useSelector } from 'react-redux';
+import { addPaymentToAPI } from '@/redux/slices/payment.slice';
+import type { RootState } from '@/redux/index';
 
 type Props = {
-  open: boolean
-  handleClose: () => void
-  paymentData?: PaymentType[]
-  setData: (data: PaymentType[]) => void
-}
+  open: boolean;
+  handleClose: () => void;
+  paymentData?: PaymentType[];
+  setData: (data: PaymentType[]) => void;
+};
 
 type FormValidateType = {
-  io: 'In' | 'Out'
-  method: 'Paypal' | 'Payoneer' | 'Wise' | 'Crypto'
-}
+  io: 'In' | 'Out';
+  method: 'Paypal' | 'Payoneer' | 'Wise' | 'Crypto';
+};
 
 type FormNonValidateType = {
-  country: string
-  client: string
-  address: string
-  amount: number
-  description: string
-}
+  country: string;
+  client: string;
+  address: string;
+  amount: number;
+  description: string;
+};
 
 // Vars
 const initialData = {
@@ -53,19 +53,18 @@ const initialData = {
   address: '',
   amount: 0,
   description: ''
-}
+};
 
 const PaymentRequestsDrawer = (props: Props) => {
-
   // Dispatch
-  const dispatch = useDispatch<any>()
-  const { loading, error } = useSelector((state: RootState) => state.payment)
+  const dispatch = useDispatch<any>();
+  const { loading, error } = useSelector((state: RootState) => state.payment);
 
   // Props
-  const { open, handleClose, paymentData, setData } = props
+  const { open, handleClose, paymentData, setData } = props;
 
   // States
-  const [formData, setFormData] = useState<FormNonValidateType>(initialData)
+  const [formData, setFormData] = useState<FormNonValidateType>(initialData);
 
   // Hooks
   const {
@@ -76,15 +75,12 @@ const PaymentRequestsDrawer = (props: Props) => {
   } = useForm<FormValidateType>({
     defaultValues: {
       io: 'In',
-      method: 'Paypal',
+      method: 'Paypal'
     }
-  })
+  });
 
   const onSubmit = (data: FormValidateType) => {
-
-
     const newPayment: PaymentType = {
-
       io: data.io,
       method: data.method,
       client: formData.client,
@@ -94,22 +90,22 @@ const PaymentRequestsDrawer = (props: Props) => {
       country: formData.country,
       status: 'Pending',
       action: true,
-      description: formData.description,
-    }
+      description: formData.description
+    };
 
     // dispatch
-    dispatch(addPaymentToAPI(newPayment))
+    dispatch(addPaymentToAPI(newPayment));
 
     // setData([...(paymentData ?? []), newPayment])
-    handleClose()
-    setFormData(initialData)
-    resetForm({ io: 'In', method: 'Paypal' })
-  }
+    handleClose();
+    setFormData(initialData);
+    resetForm({ io: 'In', method: 'Paypal' });
+  };
 
   const handleReset = () => {
-    handleClose()
-    setFormData(initialData)
-  }
+    handleClose();
+    setFormData(initialData);
+  };
 
   return (
     <Drawer
@@ -130,13 +126,15 @@ const PaymentRequestsDrawer = (props: Props) => {
       <div className='p-5'>
         <form onSubmit={handleSubmit(data => onSubmit(data))} className='flex flex-col gap-5'>
           <FormControl fullWidth>
-            <InputLabel id='io' error={Boolean(errors.io)}>I/O</InputLabel>
+            <InputLabel id='io' error={Boolean(errors.io)}>
+              I/O
+            </InputLabel>
             <Controller
               name='io'
               control={control}
               rules={{ required: true }}
               render={({ field }) => (
-                <Select label='Select I/O'  {...field} error={Boolean(errors.io)}>
+                <Select label='Select I/O' {...field} error={Boolean(errors.io)}>
                   <MenuItem value='In'>IN</MenuItem>
                   <MenuItem value='Out'>OUT</MenuItem>
                 </Select>
@@ -225,7 +223,7 @@ const PaymentRequestsDrawer = (props: Props) => {
         </form>
       </div>
     </Drawer>
-  )
-}
+  );
+};
 
-export default PaymentRequestsDrawer
+export default PaymentRequestsDrawer;

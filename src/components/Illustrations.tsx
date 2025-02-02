@@ -69,7 +69,7 @@ const Illustrations = (props: IllustrationsProp) => {
         ) : (
           image1
         )}
-        
+
         {/* Render Mask Image */}
         {typeof maskImg === 'undefined' || isImageObj(maskImg) ? (
           <MaskImg

@@ -1,5 +1,6 @@
 import type { PaymentType } from '@/types/paymentTypes';
-export const db: PaymentType[] = [{
+export const db: PaymentType[] = [
+  {
     id: 1,
     date: '2023-01-01',
     method: 'Paypal',
@@ -10,9 +11,9 @@ export const db: PaymentType[] = [{
     status: 'Success',
     action: false,
     description: 'Description',
-    io: 'In',
-},
-{
+    io: 'In'
+  },
+  {
     id: 2,
     date: '2023-01-01',
     method: 'Paypal',
@@ -23,9 +24,9 @@ export const db: PaymentType[] = [{
     status: 'Pending',
     action: true,
     description: 'Description',
-    io: 'In',
-},
-{
+    io: 'In'
+  },
+  {
     id: 3,
     date: '2023-01-01',
     method: 'Paypal',
@@ -36,9 +37,9 @@ export const db: PaymentType[] = [{
     status: 'Success',
     action: false,
     description: 'Description',
-    io: 'In',
-},
-{
+    io: 'In'
+  },
+  {
     id: 4,
     date: '2023-01-01',
     method: 'Paypal',
@@ -49,6 +50,6 @@ export const db: PaymentType[] = [{
     status: 'Success',
     action: false,
     description: 'Description',
-    io: 'In',
-},
+    io: 'In'
+  }
 ];

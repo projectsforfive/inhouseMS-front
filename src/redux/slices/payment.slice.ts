@@ -21,36 +21,38 @@ interface PaymentState {
 const initialState: PaymentState = {
   totalAmount: {
     income: 0,
-    expense: 0,
+    expense: 0
   },
-  tableData: [{
-    id: 2,
-    date: '2023-01-01',
-    method: 'Paypal',
-    address: 'example@gmail.com',
-    amount: 100,
-    country: 'India',
-    client: 'Client',
-    status: 'Pending',
-    action: true,
-    description: 'Description',
-    io: 'In',
-  },
-  {
-    id: 3,
-    date: '2023-01-01',
-    method: 'Paypal',
-    address: 'example@gmail.com',
-    amount: 1000,
-    country: 'India',
-    client: 'Client',
-    status: 'Pending',
-    action: true,
-    description: 'Description',
-    io: 'Out',
-  }],
+  tableData: [
+    {
+      id: 2,
+      date: '2023-01-01',
+      method: 'Paypal',
+      address: 'example@gmail.com',
+      amount: 100,
+      country: 'India',
+      client: 'Client',
+      status: 'Pending',
+      action: true,
+      description: 'Description',
+      io: 'In'
+    },
+    {
+      id: 3,
+      date: '2023-01-01',
+      method: 'Paypal',
+      address: 'example@gmail.com',
+      amount: 1000,
+      country: 'India',
+      client: 'Client',
+      status: 'Pending',
+      action: true,
+      description: 'Description',
+      io: 'Out'
+    }
+  ],
   loading: true, // Initial loading state
-  error: null, // Initial error state
+  error: null // Initial error state
 };
 
 // API URL
@@ -63,13 +65,10 @@ export const fetchPayments = createAsyncThunk<PaymentType[], void>('payment/fetc
 });
 
 // Create an async thunk for adding a payment
-export const addPaymentToAPI = createAsyncThunk(
-  'payment/addPayment',
-  async (newPayment: PaymentType) => {
-    const response = await axios.post(API_URL, newPayment);
-    return response.data as PaymentType; // Return the added payment
-  }
-);
+export const addPaymentToAPI = createAsyncThunk('payment/addPayment', async (newPayment: PaymentType) => {
+  const response = await axios.post(API_URL, newPayment);
+  return response.data as PaymentType; // Return the added payment
+});
 
 // Create an async thunk for updating a payment
 export const updatePaymentInAPI = createAsyncThunk(
@@ -81,13 +80,10 @@ export const updatePaymentInAPI = createAsyncThunk(
 );
 
 // Create an async thunk for deleting a payment
-export const deletePaymentFromAPI = createAsyncThunk(
-  'payment/deletePayment',
-  async (id: number) => {
-    await axios.delete(`${API_URL}/${id}`); // Delete the payment by ID
-    return id; // Return the deleted ID
-  }
-);
+export const deletePaymentFromAPI = createAsyncThunk('payment/deletePayment', async (id: number) => {
+  await axios.delete(`${API_URL}/${id}`); // Delete the payment by ID
+  return id; // Return the deleted ID
+});
 
 // Create the payment slice
 export const paymentSlice = createSlice({
@@ -97,19 +93,21 @@ export const paymentSlice = createSlice({
     updateTotalAmount: (state, action: PayloadAction<TotalAmount>) => {
       state.totalAmount = action.payload; // Update the totalAmount object
     },
-    calculateTotals: (state) => {
-      state.totalAmount.income = state.tableData.reduce((acc, payment) =>
-        payment.io === 'In' ? acc + payment.amount : acc, 0 // Sum income
+    calculateTotals: state => {
+      state.totalAmount.income = state.tableData.reduce(
+        (acc, payment) => (payment.io === 'In' ? acc + payment.amount : acc),
+        0 // Sum income
       );
-      state.totalAmount.expense = state.tableData.reduce((acc, payment) =>
-        payment.io === 'Out' ? acc + payment.amount : acc, 0 // Sum expenses
+      state.totalAmount.expense = state.tableData.reduce(
+        (acc, payment) => (payment.io === 'Out' ? acc + payment.amount : acc),
+        0 // Sum expenses
       );
-    },
+    }
   },
-  extraReducers: (builder) => {
+  extraReducers: builder => {
     // Fetch Payments
     builder
-      .addCase(fetchPayments.pending, (state) => {
+      .addCase(fetchPayments.pending, state => {
         state.loading = true; // Set loading state to true
         state.error = null; // Reset error state
       })
@@ -122,7 +120,7 @@ export const paymentSlice = createSlice({
         state.error = action.error.message || 'Failed to fetch payments'; // Set error message
       })
       // Add Payment
-      .addCase(addPaymentToAPI.pending, (state) => {
+      .addCase(addPaymentToAPI.pending, state => {
         state.loading = true; // Set loading state to true during the request
         state.error = null; // Reset error state
       })
@@ -135,7 +133,7 @@ export const paymentSlice = createSlice({
         state.error = action.error.message || 'Failed to add payment'; // Set error message
       })
       // Update Payment
-      .addCase(updatePaymentInAPI.pending, (state) => {
+      .addCase(updatePaymentInAPI.pending, state => {
         state.loading = true; // Set loading state to true during the request
         state.error = null; // Reset error state
       })
@@ -151,7 +149,7 @@ export const paymentSlice = createSlice({
         state.error = action.error.message || 'Failed to update payment'; // Set error message
       })
       // Delete Payment
-      .addCase(deletePaymentFromAPI.pending, (state) => {
+      .addCase(deletePaymentFromAPI.pending, state => {
         state.loading = true; // Set loading state to true during the request
         state.error = null; // Reset error state
       })
@@ -163,7 +161,7 @@ export const paymentSlice = createSlice({
         state.loading = false; // Set loading to false
         state.error = action.error.message || 'Failed to delete payment'; // Set error message
       });
-  },
+  }
 });
 
 // Export actions

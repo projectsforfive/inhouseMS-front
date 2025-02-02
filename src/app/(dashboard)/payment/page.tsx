@@ -1,10 +1,7 @@
 import Payment from '@/views/payment';
 
 const PaymentPage = async () => {
-  
-  return (
-    <Payment  />
-  );
+  return <Payment />;
 };
 
 export default PaymentPage;

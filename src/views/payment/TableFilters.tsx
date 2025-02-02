@@ -1,34 +1,40 @@
 // React Imports
-import { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react';
 
 // MUI Imports
-import CardContent from '@mui/material/CardContent'
-import FormControl from '@mui/material/FormControl'
-import Grid from '@mui/material/Grid'
-import InputLabel from '@mui/material/InputLabel'
-import MenuItem from '@mui/material/MenuItem'
-import Select from '@mui/material/Select'
+import CardContent from '@mui/material/CardContent';
+import FormControl from '@mui/material/FormControl';
+import Grid from '@mui/material/Grid';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
 
 // Type Imports
-import type { PaymentType } from '@/types/paymentTypes'
+import type { PaymentType } from '@/types/paymentTypes';
 
-const TableFilters = ({ setData, tableData }: { setData: (data: PaymentType[]) => void; tableData?: PaymentType[] }) => {
+const TableFilters = ({
+  setData,
+  tableData
+}: {
+  setData: (data: PaymentType[]) => void;
+  tableData?: PaymentType[];
+}) => {
   // States
-  const [role, setRole] = useState<PaymentType['role']>('')
-  const [plan, setPlan] = useState<PaymentType['currentPlan']>('')
-  const [status, setStatus] = useState<PaymentType['status']>('')
+  const [role, setRole] = useState<PaymentType['role']>('');
+  const [plan, setPlan] = useState<PaymentType['currentPlan']>('');
+  const [status, setStatus] = useState<PaymentType['status']>('');
 
   useEffect(() => {
     const filteredData = tableData?.filter(user => {
-      if (role && user.role !== role) return false
-      if (plan && user.currentPlan !== plan) return false
-      if (status && user.status !== status) return false
+      if (role && user.role !== role) return false;
+      if (plan && user.currentPlan !== plan) return false;
+      if (status && user.status !== status) return false;
 
-      return true
-    })
+      return true;
+    });
 
-    setData(filteredData || [])
-  }, [role, plan, status, tableData, setData])
+    setData(filteredData || []);
+  }, [role, plan, status, tableData, setData]);
 
   return (
     <CardContent>
@@ -95,7 +101,7 @@ const TableFilters = ({ setData, tableData }: { setData: (data: PaymentType[]) =
         </Grid>
       </Grid>
     </CardContent>
-  )
-}
+  );
+};
 
-export default TableFilters
+export default TableFilters;

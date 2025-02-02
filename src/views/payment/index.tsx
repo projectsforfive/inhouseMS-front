@@ -1,22 +1,22 @@
-'use client'
-import { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { fetchPayments } from '@/redux/slices/payment.slice'
-import type { RootState } from '@/redux/index'
+'use client';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchPayments } from '@/redux/slices/payment.slice';
+import type { RootState } from '@/redux/index';
 
 // MUI Imports
-import Grid from '@mui/material/Grid'
+import Grid from '@mui/material/Grid';
 
 // Component Imports
-import HistoryTable from './HistoryTable'
+import HistoryTable from './HistoryTable';
 // import UserListCards from './UserListCards'
 
 const UserList = () => {
-  const dispatch = useDispatch<any>()
-  const { tableData, loading, error } = useSelector((state: RootState) => state.payment)
+  const dispatch = useDispatch<any>();
+  const { tableData, loading, error } = useSelector((state: RootState) => state.payment);
   useEffect(() => {
-    dispatch(fetchPayments())
-  }, [dispatch])
+    dispatch(fetchPayments());
+  }, [dispatch]);
 
   return (
     <Grid container spacing={6}>
@@ -27,7 +27,7 @@ const UserList = () => {
         <HistoryTable tableData={tableData} />
       </Grid>
     </Grid>
-  )
-}
+  );
+};
 
-export default UserList
+export default UserList;
