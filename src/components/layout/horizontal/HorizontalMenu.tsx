@@ -23,8 +23,8 @@ import verticalNavigationCustomStyles from '@core/styles/vertical/navigationCust
 import verticalMenuItemStyles from '@core/styles/vertical/menuItemStyles';
 import verticalMenuSectionStyles from '@core/styles/vertical/menuSectionStyles';
 
-import { FaAmazonPay } from 'react-icons/fa';
-import { FiCommand } from 'react-icons/fi';
+// import { FaAmazonPay } from 'react-icons/fa';
+// import { FiCommand } from 'react-icons/fi';
 
 type RenderExpandIconProps = {
   level?: number;
@@ -88,12 +88,12 @@ const HorizontalMenu = () => {
         <MenuItem href='/dashboard' icon={<i className='ri-home-smile-line' />}>
           Dashboard
         </MenuItem>
-        <MenuItem href='/job-status' icon={<FiCommand />}>
-          Job Status
+        {/* <MenuItem href='/interview' icon={<FiCommand />}>
+          Interview
         </MenuItem>
-        <MenuItem href='/payment' icon={<FaAmazonPay />}>
-          Payment
-        </MenuItem>
+        <MenuItem href='/payment' icon={<FaAmazonPay />}> */}
+          {/* Payment
+        </MenuItem> */}
         <MenuItem href='/about' icon={<i className='ri-information-line' />}>
           About
         </MenuItem>
