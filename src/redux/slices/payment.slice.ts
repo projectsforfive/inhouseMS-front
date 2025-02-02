@@ -1,4 +1,5 @@
-import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
+import type { PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import type { PaymentType } from '@/types/paymentTypes'; // Ensure PaymentType is correctly defined
 
@@ -23,19 +24,6 @@ const initialState: PaymentState = {
     expense: 0,
   },
   tableData: [{
-    id: 1,
-    date: '2023-01-01',
-    method: 'Paypal',
-    address: 'example@gmail.com',
-    amount: 100,
-    country: 'India',
-    client: 'Client',
-    status: 'Success',
-    action: false,
-    description: 'Description',
-    io: 'In',
-},
-{
     id: 2,
     date: '2023-01-01',
     method: 'Paypal',
@@ -47,35 +35,21 @@ const initialState: PaymentState = {
     action: true,
     description: 'Description',
     io: 'In',
-},
-{
+  },
+  {
     id: 3,
     date: '2023-01-01',
     method: 'Paypal',
     address: 'example@gmail.com',
-    amount: 100,
+    amount: 1000,
     country: 'India',
     client: 'Client',
-    status: 'Success',
-    action: false,
+    status: 'Pending',
+    action: true,
     description: 'Description',
-    io: 'In',
-},
-{
-    id: 4,
-    date: '2023-01-01',
-    method: 'Paypal',
-    address: 'example@gmail.com',
-    amount: 100,
-    country: 'India',
-    client: 'Client',
-    status: 'Success',
-    action: false,
-    description: 'Description',
-    io: 'In',
-}
-], // Initialize as an empty array
-  loading: false, // Initial loading state
+    io: 'Out',
+  }],
+  loading: true, // Initial loading state
   error: null, // Initial error state
 };
 
@@ -85,7 +59,6 @@ const API_URL = 'https://api.example.com/payments';
 // Create an async thunk for fetching payments from the API
 export const fetchPayments = createAsyncThunk<PaymentType[], void>('payment/fetchPayments', async () => {
   const response = await axios.get(API_URL);
-  // Axios will throw an error for responses outside of the 2xx range by default
   return response.data as PaymentType[]; // Directly return the data
 });
 
@@ -95,6 +68,24 @@ export const addPaymentToAPI = createAsyncThunk(
   async (newPayment: PaymentType) => {
     const response = await axios.post(API_URL, newPayment);
     return response.data as PaymentType; // Return the added payment
+  }
+);
+
+// Create an async thunk for updating a payment
+export const updatePaymentInAPI = createAsyncThunk(
+  'payment/updatePayment',
+  async ({ id, updatedPayment }: { id: number; updatedPayment: PaymentType }) => {
+    const response = await axios.put(`${API_URL}/${id}`, updatedPayment);
+    return response.data as PaymentType; // Return the updated payment
+  }
+);
+
+// Create an async thunk for deleting a payment
+export const deletePaymentFromAPI = createAsyncThunk(
+  'payment/deletePayment',
+  async (id: number) => {
+    await axios.delete(`${API_URL}/${id}`); // Delete the payment by ID
+    return id; // Return the deleted ID
   }
 );
 
@@ -116,6 +107,7 @@ export const paymentSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
+    // Fetch Payments
     builder
       .addCase(fetchPayments.pending, (state) => {
         state.loading = true; // Set loading state to true
@@ -124,12 +116,12 @@ export const paymentSlice = createSlice({
       .addCase(fetchPayments.fulfilled, (state, action: PayloadAction<PaymentType[]>) => {
         state.loading = false; // Set loading state to false
         state.tableData = action.payload; // Store fetched payments in state
-        state.error = null; // Reset error state
       })
       .addCase(fetchPayments.rejected, (state, action) => {
         state.loading = false; // Set loading state to false
         state.error = action.error.message || 'Failed to fetch payments'; // Set error message
       })
+      // Add Payment
       .addCase(addPaymentToAPI.pending, (state) => {
         state.loading = true; // Set loading state to true during the request
         state.error = null; // Reset error state
@@ -137,11 +129,39 @@ export const paymentSlice = createSlice({
       .addCase(addPaymentToAPI.fulfilled, (state, action: PayloadAction<PaymentType>) => {
         state.loading = false; // Set loading to false
         state.tableData.push(action.payload); // Add the new payment to the state
-        state.error = null; // Reset error state
       })
       .addCase(addPaymentToAPI.rejected, (state, action) => {
         state.loading = false; // Set loading to false
         state.error = action.error.message || 'Failed to add payment'; // Set error message
+      })
+      // Update Payment
+      .addCase(updatePaymentInAPI.pending, (state) => {
+        state.loading = true; // Set loading state to true during the request
+        state.error = null; // Reset error state
+      })
+      .addCase(updatePaymentInAPI.fulfilled, (state, action: PayloadAction<PaymentType>) => {
+        state.loading = false; // Set loading to false
+        const index = state.tableData.findIndex(payment => payment.id === action.payload.id);
+        if (index !== -1) {
+          state.tableData[index] = action.payload; // Update the payment in the state
+        }
+      })
+      .addCase(updatePaymentInAPI.rejected, (state, action) => {
+        state.loading = false; // Set loading to false
+        state.error = action.error.message || 'Failed to update payment'; // Set error message
+      })
+      // Delete Payment
+      .addCase(deletePaymentFromAPI.pending, (state) => {
+        state.loading = true; // Set loading state to true during the request
+        state.error = null; // Reset error state
+      })
+      .addCase(deletePaymentFromAPI.fulfilled, (state, action: PayloadAction<number>) => {
+        state.loading = false; // Set loading to false
+        state.tableData = state.tableData.filter(payment => payment.id !== action.payload); // Filter out the deleted payment
+      })
+      .addCase(deletePaymentFromAPI.rejected, (state, action) => {
+        state.loading = false; // Set loading to false
+        state.error = action.error.message || 'Failed to delete payment'; // Set error message
       });
   },
 });

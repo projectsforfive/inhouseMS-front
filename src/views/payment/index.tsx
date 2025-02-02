@@ -2,13 +2,10 @@
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchPayments } from '@/redux/slices/payment.slice'
-import { RootState } from '@/redux/index'
+import type { RootState } from '@/redux/index'
 
 // MUI Imports
 import Grid from '@mui/material/Grid'
-
-// Type Imports
-import type { PaymentType } from '@/types/paymentTypes'
 
 // Component Imports
 import HistoryTable from './HistoryTable'

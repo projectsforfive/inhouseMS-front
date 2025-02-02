@@ -15,13 +15,16 @@ import FormHelperText from '@mui/material/FormHelperText'
 import Typography from '@mui/material/Typography'
 import Divider from '@mui/material/Divider'
 
-
 // Third-party Imports
 import { useForm, Controller } from 'react-hook-form'
 
 // Types Imports
 import type { PaymentType } from '@/types/paymentTypes'
 
+//dispatch
+import { useDispatch, useSelector } from 'react-redux'
+import { addPaymentToAPI } from '@/redux/slices/payment.slice'
+import type { RootState } from '@/redux/index'
 
 type Props = {
   open: boolean
@@ -52,7 +55,12 @@ const initialData = {
   description: ''
 }
 
-const AddUserDrawer = (props: Props) => {
+const PaymentRequestsDrawer = (props: Props) => {
+
+  // Dispatch
+  const dispatch = useDispatch<any>()
+  const { loading, error } = useSelector((state: RootState) => state.payment)
+
   // Props
   const { open, handleClose, paymentData, setData } = props
 
@@ -73,8 +81,10 @@ const AddUserDrawer = (props: Props) => {
   })
 
   const onSubmit = (data: FormValidateType) => {
+
+
     const newPayment: PaymentType = {
-      id: (paymentData?.length && paymentData?.length + 1) || 1,
+
       io: data.io,
       method: data.method,
       client: formData.client,
@@ -86,12 +96,14 @@ const AddUserDrawer = (props: Props) => {
       action: true,
       description: formData.description,
     }
-    
-    console.log(newPayment)
+
+    // dispatch
+    dispatch(addPaymentToAPI(newPayment))
+
     // setData([...(paymentData ?? []), newPayment])
     handleClose()
     setFormData(initialData)
-    resetForm({ io: 'In', method: 'Paypal'})
+    resetForm({ io: 'In', method: 'Paypal' })
   }
 
   const handleReset = () => {
@@ -203,7 +215,7 @@ const AddUserDrawer = (props: Props) => {
             onChange={e => setFormData({ ...formData, description: e.target.value })}
           />
           <div className='flex items-center gap-4'>
-            <Button variant='contained' type='submit'>
+            <Button variant='contained' type='submit' disabled={!loading}>
               Submit
             </Button>
             <Button variant='outlined' color='error' type='reset' onClick={() => handleReset()}>
@@ -216,4 +228,4 @@ const AddUserDrawer = (props: Props) => {
   )
 }
 
-export default AddUserDrawer
+export default PaymentRequestsDrawer

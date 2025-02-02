@@ -2,7 +2,7 @@
 // import type { ThemeColor } from '@core/types'
 
 export type PaymentType = {
-  id: number
+  id?: number
   io:'In'|'Out'
   method:'Paypal'|'Payoneer'|'Wise'|'Crypto'
   client: string

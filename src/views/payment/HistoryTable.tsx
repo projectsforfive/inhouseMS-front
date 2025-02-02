@@ -46,20 +46,20 @@ import type { PaymentType } from '@/types/paymentTypes'
 
 // Component Imports
 import TableFilters from './TableFilters'
-import AddUserDrawer from './PaymentRequestsDrawer'
-import OptionMenu from '@core/components/option-menu'
-import CustomAvatar from '@core/components/mui/Avatar'
+import PaymentRequestsDrawer from './PaymentRequestsDrawer'
+// import OptionMenu from '@core/components/option-menu'
+// import CustomAvatar from '@core/components/mui/Avatar'
 
 // Util Imports
 import { getInitials } from '@/utils/getInitials'
-// import { getLocalizedUrl } from '@/utils/i18n'
 
 // Style Imports
 import tableStyles from '@core/styles/table.module.css'
 
 // income and expense
-import { useSelector } from 'react-redux'
-import { RootState } from '@/redux/index'
+import { useDispatch,useSelector } from 'react-redux'
+import type { RootState } from '@/redux/index'
+import { deletePaymentFromAPI } from '@/redux/slices/payment.slice'
 
 
 declare module '@tanstack/table-core' {
@@ -123,26 +123,34 @@ const DebouncedInput = ({
 }
 
 
-const userStatusObj: UserStatusType = {
-    success: 'success',
-    pending: 'warning',
-    failed: 'secondary'
-}
+// const userStatusObj: UserStatusType = {
+//     success: 'success',
+//     pending: 'warning',
+//     failed: 'secondary'
+// }
 
 // Column Definitions
 const columnHelper = createColumnHelper<UsersTypeWithAction>()
 
-const UserListTable = ({ tableData }: { tableData?: PaymentType[] }) => {
+const HistoryListTable = ({ tableData }: { tableData?: PaymentType[] }) => {
+
+    const dispatch = useDispatch<any>()
     const { totalAmount } = useSelector((state: RootState) => state.payment)
+
     // States
-    const [addUserOpen, setAddUserOpen] = useState(false)
+    const [openPaymentRequestDrawer, setOpenPaymentRequestDrawer] = useState(false)
     const [rowSelection, setRowSelection] = useState({})
     const [data, setData] = useState(...[tableData])
     const [filteredData, setFilteredData] = useState(data)
     const [globalFilter, setGlobalFilter] = useState('')
 
-    // Hooks
-    const { lang: locale } = useParams()
+    const deletePayment = async (id: number) => {
+        await dispatch(deletePaymentFromAPI(id))
+    }
+    const updatePayment = async (updatedPayment: any) => {
+        setOpenPaymentRequestDrawer(true)
+        
+    }
 
     const columns = useMemo<ColumnDef<UsersTypeWithAction, any>[]>(
         () => [
@@ -224,10 +232,12 @@ const UserListTable = ({ tableData }: { tableData?: PaymentType[] }) => {
                 cell: ({ row }) => (
                     
                   <div className='flex items-center'>
-                    <IconButton disabled={!row.original.action} onClick={() => setData(data?.filter(product => product.id !== row.original.id))}>
+                    <IconButton disabled={!row.original.action} onClick={() => {if (row.original.id) deletePayment(row.original.id)}}>
                       <i className='ri-delete-bin-7-line text-textSecondary' />
                     </IconButton>
-                    <IconButton disabled={!row.original.action}><i className='ri-edit-box-line text-textSecondary' /></IconButton>
+                    <IconButton disabled={!row.original.action} onClick={() =>{ if (row.original.id) updatePayment(data?.filter(product => product.id !== row.original.id))}}>
+                      <i className='ri-edit-box-line text-textSecondary' />
+                    </IconButton>
                   </div>
                 ),
                 enableSorting: false
@@ -299,10 +309,9 @@ const UserListTable = ({ tableData }: { tableData?: PaymentType[] }) => {
                 <div className='flex justify-between p-5 gap-4 flex-col items-start sm:flex-row sm:items-center'>
                     <div
                         color='secondary'
-                        variant='outlined'
-                        startIcon={<i className='ri-upload-2-line text-xl' />}
                         className='max-sm:is-full'
                     >
+                        <i className='ri-upload-2-line text-xl' />
                         Total (In/Out) : ${totalAmount.income} / ${totalAmount.expense}
                     </div>
                     <div className='flex items-center gap-x-4 gap-4 flex-col max-sm:is-full sm:flex-row'>
@@ -312,7 +321,7 @@ const UserListTable = ({ tableData }: { tableData?: PaymentType[] }) => {
                             placeholder='Search User'
                             className='max-sm:is-full'
                         />
-                        <Button variant='contained' onClick={() => setAddUserOpen(!addUserOpen)} className='max-sm:is-full'>
+                        <Button variant='contained' onClick={() => setOpenPaymentRequestDrawer(!openPaymentRequestDrawer)} className='max-sm:is-full'>
                             REQUEST
                         </Button>
                     </div>
@@ -388,14 +397,14 @@ const UserListTable = ({ tableData }: { tableData?: PaymentType[] }) => {
                     onRowsPerPageChange={e => table.setPageSize(Number(e.target.value))}
                 />
             </Card>
-            <AddUserDrawer
-                open={addUserOpen}
-                handleClose={() => setAddUserOpen(!addUserOpen)}
-                usrData={data}
+            <PaymentRequestsDrawer
+                open={openPaymentRequestDrawer}
+                handleClose={() => setOpenPaymentRequestDrawer(!openPaymentRequestDrawer)}
+                paymentData={data}
                 setData={setData}
             />
         </>
     )
 }
 
-export default UserListTable
+export default HistoryListTable
