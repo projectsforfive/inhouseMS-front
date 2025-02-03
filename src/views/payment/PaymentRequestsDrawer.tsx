@@ -13,7 +13,8 @@ import TextareaAutosize from '@mui/material/TextareaAutosize';
 import FormHelperText from '@mui/material/FormHelperText';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
-import { useDispatch } from 'react-redux';
+import { useDispatch,useSelector } from 'react-redux';
+import { RootState } from '@/redux/index';
 import { addPaymentToAPI, updatePaymentInAPI } from '@/redux/slices/payment.slice';
 import type { PaymentType } from '@/types/paymentTypes';
 
@@ -40,7 +41,7 @@ const defaultFormData: PaymentType = {
 const PaymentRequestsDrawer = (props: Props) => {
   const { open, handleClose, paymentData } = props;
   const dispatch = useDispatch<any>();
-
+  const { loading, error } = useSelector((state: RootState) => state.payment);
   const [formData, setFormData] = useState<PaymentType>(defaultFormData);
 
   // Effect to populate formData if paymentData is provided
@@ -188,7 +189,7 @@ const PaymentRequestsDrawer = (props: Props) => {
             onChange={e => setFormData({ ...formData, description: e.target.value })}
           />
           <div className='flex items-center gap-4'>
-            <Button variant='contained' type='submit'>
+            <Button variant='contained' type='submit' disabled={loading}>
               {paymentData && Object.keys(paymentData).length > 0 ? 'Update' : 'Submit'}
             </Button>
             <Button variant='outlined' color='error' type='reset' onClick={handleReset}>

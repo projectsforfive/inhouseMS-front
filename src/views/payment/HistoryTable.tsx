@@ -3,10 +3,6 @@
 // React Imports
 import { useEffect, useState, useMemo } from 'react'
 
-// Next Imports
-import Link from 'next/link'
-import { useParams } from 'next/navigation'
-
 import dayjs, { Dayjs } from 'dayjs';
 // MUI Imports
 import Card from '@mui/material/Card'
@@ -16,7 +12,6 @@ import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
 import IconButton from '@mui/material/IconButton'
-import { DateRangePicker } from '@mui/x-date-pickers-pro';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DateRange } from '@mui/x-date-pickers-pro/models';
@@ -44,14 +39,10 @@ import type { ColumnDef, FilterFn } from '@tanstack/react-table'
 import type { RankingInfo } from '@tanstack/match-sorter-utils'
 
 // Type Imports
-import type { ThemeColor } from '@core/types'
 import type { PaymentType } from '@/types/paymentTypes'
-// import type { Locale } from '@configs/i18n'
 
 // Component Imports
-import TableFilters from './TableFilters'
 import PaymentRequestsDrawer from './PaymentRequestsDrawer'
-
 
 // Style Imports
 import tableStyles from '@core/styles/table.module.css'
@@ -285,7 +276,6 @@ const HistoryListTable = ({ tableData }: { tableData?: PaymentType[] }) => {
             }
         },
         enableRowSelection: false, //enable row selection for all rows
-        // enableRowSelection: row => row.original.age > 18, // or enable row selection conditionally per row
         globalFilterFn: fuzzyFilter,
         onRowSelectionChange: setRowSelection,
         getCoreRowModel: getCoreRowModel(),
