@@ -58,12 +58,11 @@ const Illustrations = (props: IllustrationsProp) => {
     return (
       <>
         {typeof image1 === 'undefined' || isImageObj(image1) ? (
-          <Image
+          <img
             alt={image1?.alt || 'tree-1'}
             src={image1?.src || '/images/illustrations/objects/tree-1.png'}
             className={image1?.className || 'absolute inline-start-0 block-end-0'}
-            width={image1?.width}
-            height={image1?.height || 200}
+            style={{ width: 'auto', height: '200px' }}  
           />
         ) : (
           image1
@@ -80,7 +79,7 @@ const Illustrations = (props: IllustrationsProp) => {
           maskImg
         )}
         {typeof image2 === 'undefined' || isImageObj(image2) ? (
-          <Image
+          <img
             alt={image2?.alt || 'tree-2'}
             src={image2?.src || '/images/illustrations/objects/tree-2.png'}
             className={image2?.className || 'absolute inline-end-0 block-end-0'}

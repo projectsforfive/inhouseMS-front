@@ -33,7 +33,9 @@ import themeConfig from '@configs/themeConfig';
 // Hook Imports
 import { useImageVariant } from '@core/hooks/useImageVariant';
 import { useSettings } from '@core/hooks/useSettings';
-import Image from 'next/image';
+
+import { signInWithEmailAndPassword, UserCredential } from 'firebase/auth';
+import { auth } from '@/configs/firebaseConfig'
 
 const LoginV2 = ({ mode }: { mode: Mode }) => {
   // States
@@ -62,6 +64,15 @@ const LoginV2 = ({ mode }: { mode: Mode }) => {
 
   const handleClickShowPassword = () => setIsPasswordShown(show => !show);
 
+  const loginHandle = (e) => {
+    const email: string = e.currentTarget.email.value;
+    const password: string = e.currentTarget.password.value;
+    signInWithEmailAndPassword(auth, email, password)
+      .then((credential: UserCredential) => {
+        window.location.href = '/dashboard'
+      })
+  }
+
   return (
     <div className='flex bs-full justify-center'>
       <div
@@ -73,7 +84,7 @@ const LoginV2 = ({ mode }: { mode: Mode }) => {
         )}
       >
         <div className='plb-12 pis-12'>
-          <Image
+          <img
             src={characterIllustration}
             alt='character-illustration'
             className='max-bs-[500px] max-is-full bs-auto'
@@ -103,11 +114,12 @@ const LoginV2 = ({ mode }: { mode: Mode }) => {
             }}
             className='flex flex-col gap-5'
           >
-            <TextField autoFocus fullWidth label='Email' />
+            <TextField autoFocus fullWidth label='Email' name='email' type='email' />
             <TextField
               fullWidth
               label='Password'
               type={isPasswordShown ? 'text' : 'password'}
+              name='password'
               InputProps={{
                 endAdornment: (
                   <InputAdornment position='end'>
@@ -129,7 +141,7 @@ const LoginV2 = ({ mode }: { mode: Mode }) => {
                 Forgot password?
               </Typography>
             </div>
-            <Button fullWidth variant='contained' type='submit'>
+            <Button fullWidth variant='contained' type='submit' onClick={loginHandle}>
               Log In
             </Button>
             <div className='flex justify-center items-center flex-wrap gap-2'>

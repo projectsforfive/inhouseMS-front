@@ -27,7 +27,7 @@ import type { Mode } from '@core/types'
 // Component Imports
 import Logo from '@components/layout/shared/Logo'
 import Illustrations from '@components/Illustrations'
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword, sendEmailVerification, UserCredential } from 'firebase/auth';
 import { auth } from '@/configs/firebaseConfig'
 
 // Hook Imports
@@ -40,7 +40,7 @@ import { useSettings } from '@core/hooks/useSettings'
 const RegisterV2 = ({ mode }: { mode: Mode }) => {
   // States
   const [isPasswordShown, setIsPasswordShown] = useState(false)
-
+  
   // Vars
   const darkImg = '/images/pages/auth-v2-mask-dark.png'
   const lightImg = '/images/pages/auth-v2-mask-light.png'
@@ -64,16 +64,18 @@ const RegisterV2 = ({ mode }: { mode: Mode }) => {
 
   const handleClickShowPassword = () => setIsPasswordShown(show => !show)
 
-  const onRegisterHandle = (e) => {
+  const onRegisterHandle = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     
-    const username: string = e.target.username.value;
-    const email: string = e.target.email.value;
-    const password: string = e.target.password.value;
+    const username: string = e.currentTarget.username.value;
+    const email: string = e.currentTarget.email.value;
+    const password: string = e.currentTarget.password.value;
 
     createUserWithEmailAndPassword(auth, email, password)
-      .then((credential) => {
+      .then((credential: UserCredential) => {
         console.log(credential);
+        sendEmailVerification(credential.user);
+        window.location.href='/login'
       }).catch(() => {
 
       })
