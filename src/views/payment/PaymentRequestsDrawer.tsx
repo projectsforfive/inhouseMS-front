@@ -1,5 +1,4 @@
-// React Imports
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 // MUI Imports
 import Button from '@mui/material/Button';
@@ -14,97 +13,81 @@ import TextareaAutosize from '@mui/material/TextareaAutosize';
 import FormHelperText from '@mui/material/FormHelperText';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
-
-// Third-party Imports
-import { useForm, Controller } from 'react-hook-form';
-
-// Types Imports
+import { useDispatch } from 'react-redux';
+import { addPaymentToAPI, updatePaymentInAPI } from '@/redux/slices/payment.slice';
 import type { PaymentType } from '@/types/paymentTypes';
 
-//dispatch
-import { useDispatch, useSelector } from 'react-redux';
-import { addPaymentToAPI } from '@/redux/slices/payment.slice';
-import type { RootState } from '@/redux/index';
 
 type Props = {
   open: boolean;
   handleClose: () => void;
-  paymentData?: PaymentType[];
-  setData: (data: PaymentType[]) => void;
+  paymentData?: any;
 };
 
-type FormValidateType = {
-  io: 'In' | 'Out';
-  method: 'Paypal' | 'Payoneer' | 'Wise' | 'Crypto';
-};
-
-type FormNonValidateType = {
-  country: string;
-  client: string;
-  address: string;
-  amount: number;
-  description: string;
-};
-
-// Vars
-const initialData = {
+const defaultFormData: PaymentType = {
+  io: 'In',
+  method: 'Paypal',
   country: '',
   client: '',
   address: '',
   amount: 0,
-  description: ''
+  description: '',
+  date: new Date().toLocaleDateString(),
+  status: 'Pending',
+  action: true,
 };
 
 const PaymentRequestsDrawer = (props: Props) => {
-  // Dispatch
+  const { open, handleClose, paymentData } = props;
   const dispatch = useDispatch<any>();
-  const { loading, error } = useSelector((state: RootState) => state.payment);
 
-  // Props
-  const { open, handleClose, paymentData, setData } = props;
+  const [formData, setFormData] = useState<PaymentType>(defaultFormData);
 
-  // States
-  const [formData, setFormData] = useState<FormNonValidateType>(initialData);
-
-  // Hooks
-  const {
-    control,
-    reset: resetForm,
-    handleSubmit,
-    formState: { errors }
-  } = useForm<FormValidateType>({
-    defaultValues: {
-      io: 'In',
-      method: 'Paypal'
+  // Effect to populate formData if paymentData is provided
+  useEffect(() => {
+    if (paymentData && Object.keys(paymentData).length > 0) {
+      setFormData({ ...paymentData });
+    } else {
+      setFormData(defaultFormData);
     }
+  }, [paymentData]);
+
+  const [errors, setErrors] = useState<{ io: boolean; method: boolean }>({
+    io: false,
+    method: false,
   });
 
-  const onSubmit = (data: FormValidateType) => {
-    const newPayment: PaymentType = {
-      io: data.io,
-      method: data.method,
-      client: formData.client,
-      date: new Date().toLocaleDateString(),
-      address: formData.address,
-      amount: formData.amount,
-      country: formData.country,
-      status: 'Pending',
-      action: true,
-      description: formData.description
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    // Basic validation
+    const newErrors = {
+      io: !formData.io,
+      method: !formData.method,
     };
 
-    // dispatch
-    dispatch(addPaymentToAPI(newPayment));
+    setErrors(newErrors);
 
-    // setData([...(paymentData ?? []), newPayment])
+    if (newErrors.io || newErrors.method) {
+      return; // Prevent submission if there are errors
+    }
+
+    const newPayment: PaymentType = {
+      ...formData,
+
+      date: new Date().toLocaleDateString(),
+      status: 'Pending',
+      action: true,
+    };
+
+   paymentData && Object.keys(paymentData).length > 0 ? dispatch(updatePaymentInAPI({ id: paymentData.id, updatedPayment: newPayment })) : dispatch(addPaymentToAPI(newPayment));
     handleClose();
-    setFormData(initialData);
-    resetForm({ io: 'In', method: 'Paypal' });
+    setFormData(defaultFormData);
   };
 
   const handleReset = () => {
     handleClose();
-    setFormData(initialData);
+    setFormData(defaultFormData);
   };
 
   return (
@@ -124,42 +107,34 @@ const PaymentRequestsDrawer = (props: Props) => {
       </div>
       <Divider />
       <div className='p-5'>
-        <form onSubmit={handleSubmit(data => onSubmit(data))} className='flex flex-col gap-5'>
-          <FormControl fullWidth>
-            <InputLabel id='io' error={Boolean(errors.io)}>
-              I/O
-            </InputLabel>
-            <Controller
-              name='io'
-              control={control}
-              rules={{ required: true }}
-              render={({ field }) => (
-                <Select label='Select I/O' {...field} error={Boolean(errors.io)}>
-                  <MenuItem value='In'>IN</MenuItem>
-                  <MenuItem value='Out'>OUT</MenuItem>
-                </Select>
-              )}
-            />
+
+        <form onSubmit={handleSubmit} className='flex flex-col gap-5'>
+          <FormControl fullWidth error={errors.io}>
+            <InputLabel id='io'>I/O</InputLabel>
+            <Select
+              label='Select I/O'
+              value={formData.io}
+              onChange={e => setFormData({ ...formData, io: e.target.value as 'In' | 'Out' })}
+            >
+              <MenuItem value='In'>IN</MenuItem>
+              <MenuItem value='Out'>OUT</MenuItem>
+            </Select>
+
             {errors.io && <FormHelperText error>This field is required.</FormHelperText>}
           </FormControl>
-          <FormControl fullWidth>
-            <InputLabel id='method' error={Boolean(errors.method)}>
-              Select Method
-            </InputLabel>
-            <Controller
-              name='method'
-              control={control}
-              rules={{ required: true }}
-              render={({ field }) => (
-                <Select label='Select Method' {...field} error={Boolean(errors.method)}>
-                  <MenuItem value='Paypal'>Paypal</MenuItem>
-                  <MenuItem value='Payoneer'>Payoneer</MenuItem>
-                  <MenuItem value='Wise'>Wise</MenuItem>
-                  <MenuItem value='Crypto'>Crypto</MenuItem>
-                </Select>
-              )}
-              {...(errors.method && { error: true, helperText: 'This field is required.' })}
-            />
+
+          <FormControl fullWidth error={errors.method}>
+            <InputLabel id='method'>Select Method</InputLabel>
+            <Select
+              label='Select Method'
+              value={formData.method}
+              onChange={e => setFormData({ ...formData, method: e.target.value as 'Paypal' | 'Payoneer' | 'Wise' | 'Crypto' })}
+            >
+              <MenuItem value='Paypal'>Paypal</MenuItem>
+              <MenuItem value='Payoneer'>Payoneer</MenuItem>
+              <MenuItem value='Wise'>Wise</MenuItem>
+              <MenuItem value='Crypto'>Crypto</MenuItem>
+            </Select>
             {errors.method && <FormHelperText error>This field is required.</FormHelperText>}
           </FormControl>
 
@@ -197,7 +172,6 @@ const PaymentRequestsDrawer = (props: Props) => {
               value={formData.country}
               onChange={e => setFormData({ ...formData, country: e.target.value })}
               label='Select Country'
-              labelId='country'
             >
               <MenuItem value='India'>India</MenuItem>
               <MenuItem value='USA'>USA</MenuItem>
@@ -205,6 +179,7 @@ const PaymentRequestsDrawer = (props: Props) => {
               <MenuItem value='Germany'>Germany</MenuItem>
             </Select>
           </FormControl>
+
           <TextareaAutosize
             maxRows={10}
             className='min-h-[100px] p-2'
@@ -213,10 +188,10 @@ const PaymentRequestsDrawer = (props: Props) => {
             onChange={e => setFormData({ ...formData, description: e.target.value })}
           />
           <div className='flex items-center gap-4'>
-            <Button variant='contained' type='submit' disabled={!loading}>
-              Submit
+            <Button variant='contained' type='submit'>
+              {paymentData && Object.keys(paymentData).length > 0 ? 'Update' : 'Submit'}
             </Button>
-            <Button variant='outlined' color='error' type='reset' onClick={() => handleReset()}>
+            <Button variant='outlined' color='error' type='reset' onClick={handleReset}>
               Cancel
             </Button>
           </div>
