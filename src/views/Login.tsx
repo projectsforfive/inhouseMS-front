@@ -64,7 +64,7 @@ const LoginV2 = ({ mode }: { mode: Mode }) => {
 
   const handleClickShowPassword = () => setIsPasswordShown(show => !show);
 
-  const loginHandle = (e) => {
+  const loginHandle = (e: React.FormEvent<HTMLFormElement>) => {
     const email: string = e.currentTarget.email.value;
     const password: string = e.currentTarget.password.value;
     signInWithEmailAndPassword(auth, email, password)
