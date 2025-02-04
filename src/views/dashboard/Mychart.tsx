@@ -4,23 +4,17 @@ import { Chart, registerables, ChartData, ChartOptions } from 'chart.js';
 // Register all necessary components from Chart.js
 Chart.register(...registerables);
 
-const DATA_COUNT = 17; // Number of data points to display
-const NUMBER_INCOME_CFG = { count: DATA_COUNT, min: 0, max: 10000 };
-const NUMBER_EXPENSE_CFG = { count: DATA_COUNT, min: -10000, max: 0 };
-
 // Utility functions for generating random data
 const Utils = {
-    member: (config: { count: number }) => {
-        const member = ['John', 'Jane', 'Bob', 'Alice', 'Charlie', 'Dave', 'Eve', 'Frank', 'Grace', 'Heidi', 'Isabella', 'Jack', 'Julia', 'Kate', 'Liam', 'Mike', 'Olivia', 'Peter', 'Quinn', 'Sarah', 'Tom'];
-        return member.slice(0, config.count);
-    },
-    numbers: (
-        config: { count: number; min: number; max: number }) => {
-        return Array.from(Array(config.count)).map(() => Math.floor(Math.random() * (config.max - config.min + 1)) + config.min);
-    },
+
+    members: [{ name: "John", income: 7000 }, { name: "Jane", income: 2000 }, { name: "Bob", income: 3000 }, { name: "Alice", income: 4000 }, { name: "Charlie", income: 5000 }, { name: "Dave", income: 6000 }, { name: "Eve", income: 7000 }, { name: "Frank", income: 8000 }, { name: "Grace", income: 9000 },
+    { name: "Heidi", income: 10000 }, { name: "Isabella", income: 11000 }, { name: "Jack", income: 12000 },
+    { name: "Julia", income: 13000 }, { name: "Kate", income: 14000 }, { name: "Liam", income: 15000 }, { name: "Mike", income: 16000 },
+    { name: "Olivia", income: 13000 }, { name: "Peter", income: 18000 }, { name: "Quinn", income: 19000 },
+    { name: "Sarah", income: 30000 }, { name: "Tom", income: 21000 }],
     CHART_COLORS: {
         red: 'rgba(255, 99, 132, 0.5)',
-        blue: 'rgba(54, 162, 235, 0.5)',
+        blue: '#8C57FF',
     },
 };
 
@@ -32,25 +26,21 @@ const MyStackedBarChart: React.FC = () => {
 
         if (!ctx) return; // Ensure we have a valid canvas context
 
-        const labels = Utils.member({ count: DATA_COUNT });
+        const labels = Utils.members.map((member) => member.name);
         const data: ChartData<'bar'> = {
             labels: labels,
             datasets: [
                 {
                     label: 'Income',
-                    data: Utils.numbers(NUMBER_INCOME_CFG),
-                    backgroundColor: Utils.CHART_COLORS.red,
-                },
-                {
-                    label: 'Expense',
-                    data: Utils.numbers(NUMBER_EXPENSE_CFG),
+                    data: Utils.members.map((member) => member.income),
                     backgroundColor: Utils.CHART_COLORS.blue,
                 },
-                
             ]
         };
 
         const options: ChartOptions<'bar'> = {
+            responsive: true,
+            maintainAspectRatio: false,
             scales: {
                 x: {
                     stacked: true
@@ -73,7 +63,7 @@ const MyStackedBarChart: React.FC = () => {
         };
     }, []);
 
-    return <canvas ref={chartRef} width="100" height="50"></canvas>;
+    return <div className='w-[60%]'><canvas ref={chartRef} width="100" height="50" style={{ width: "100%", height: "50vh" }}></canvas></div>;
 };
 
 export default MyStackedBarChart;

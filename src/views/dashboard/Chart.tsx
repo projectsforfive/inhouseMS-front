@@ -3,8 +3,7 @@
 import MyChart from './Mychart';
 
 const Chart = () => {
-  return <div className="basis-1/2">
-      <h1>Chart</h1>
+  return <div >
       <MyChart />
       <style jsx>{`
                 main {
@@ -12,7 +11,6 @@ const Chart = () => {
                     flex-direction: column;
                     align-items: center;
                     justify-content: center;
-                  
                     text-align: center;
                 }
             `}</style>
