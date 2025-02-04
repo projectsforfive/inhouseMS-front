@@ -95,7 +95,7 @@ const Customizer = ({ breakpoint = 'lg', dir = 'ltr' }: CustomizerProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [direction, setDirection] = useState(dir);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
+  console.log(direction);
   // Refs
   const anchorRef = useRef<HTMLDivElement | null>(null);
 
@@ -325,8 +325,8 @@ const Customizer = ({ breakpoint = 'lg', dir = 'ltr' }: CustomizerProps) => {
                 </div>
               </div>
               {settings.mode === 'dark' ||
-              (settings.mode === 'system' && isSystemDark) ||
-              settings.layout === 'horizontal' ? null : (
+                (settings.mode === 'system' && isSystemDark) ||
+                settings.layout === 'horizontal' ? null : (
                 <div className='flex items-center justify-between'>
                   <label className='font-medium cursor-pointer' htmlFor='customizer-semi-dark'>
                     Semi Dark

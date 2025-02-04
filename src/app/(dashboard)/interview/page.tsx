@@ -2,7 +2,7 @@
 import classnames from 'classnames'
 
 // Component Imports
-import Cardlist from '@views/interview/InterviewBoard'
+import Cardlist from '@/views/interview/Cardlist'
 
 // Util Imports
 import { commonLayoutClasses } from '@layouts/utils/layoutClasses'

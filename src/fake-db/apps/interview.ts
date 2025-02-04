@@ -1,31 +1,36 @@
 import type { InterviewType } from '@/types/apps/interviewTypes';
 
 export const db: InterviewType = {
-  columns: [
+  cardlists: [
     {
       id: 1,
+      board: 1,
       title: 'Introduction',
-      taskIds: [1, 2]
+      cardIds: [1, 2]
     },
     {
       id: 2,
+      board: 1,
       title: 'Technical Call',
-      taskIds: [3, 4]
+      cardIds: [3, 4]
     },
     {
       id: 3,
+      board: 1,
       title: 'Declined',
-      taskIds: [5, 6]
+      cardIds: [5, 6]
     },
     {
       id: 4,
+      board: 1,
       title: 'Hired',
-      taskIds: [7, 8]
+      cardIds: [7, 8]
     },
   ],
-  tasks: [
+  cards: [
     {
       id: 1,
+      board: 1,
       title: 'Research FAQ page UX',
       badgeText: ['UX'],
       attachments: 4,
@@ -39,6 +44,7 @@ export const db: InterviewType = {
     },
     {
       id: 2,
+      board: 1,
       title: 'Review Javascript code',
       badgeText: ['Code Review'],
       attachments: 2,
@@ -51,6 +57,7 @@ export const db: InterviewType = {
     },
     {
       id: 3,
+      board: 1,
       title: 'Review completed Apps',
       badgeText: ['Dashboard'],
       attachments: 8,
@@ -63,6 +70,7 @@ export const db: InterviewType = {
     },
     {
       id: 4,
+      board: 1,
       title: 'Find new images for pages',
       badgeText: ['Images'],
       attachments: 10,
@@ -78,6 +86,7 @@ export const db: InterviewType = {
     },
     {
       id: 5,
+      board: 1,
       title: 'Forms & tables section',
       badgeText: ['App'],
       attachments: 5,
@@ -91,6 +100,7 @@ export const db: InterviewType = {
     },
     {
       id: 6,
+      board: 1,
       title: 'Complete charts & maps',
       badgeText: ['Charts & Map'],
       attachments: 6,
@@ -98,5 +108,31 @@ export const db: InterviewType = {
       assigned: [{ src: '/images/avatars/4.png', name: 'Emily Davis' }],
       dueDate: new Date(new Date().getFullYear(), 11, 5)
     }
-  ]
+  ],
+  boards: [
+    {
+      id: 1,
+      title: 'January',
+      cardlist: [],
+      color: "red",
+      stared: false,
+      number: 5,
+    },
+    {
+      id: 2,
+      title: 'Febrary',
+      cardlist: [],
+      color: "red",
+      stared: false,
+      number: 5,
+    },
+    {
+      id: 3,
+      title: 'March',
+      cardlist: [],
+      color: "red",
+      stared: false,
+      number: 5,
+    },
+  ],
 };
