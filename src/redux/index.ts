@@ -8,13 +8,13 @@ import paymentReducer from './slices/payment.slice';
 
 const rootReducer = combineReducers({
   auth: authReducer,
-  payment: paymentReducer
 });
 
 export const store = configureStore({
   reducer: {
     rootReducer,
     interviewReducer,
+    payment: paymentReducer
   },
   middleware: getDefaultMiddleware => getDefaultMiddleware({ serializableCheck: false })
 })

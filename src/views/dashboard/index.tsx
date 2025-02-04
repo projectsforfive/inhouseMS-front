@@ -3,7 +3,7 @@
 import Chart from './Chart';
 
 const Dashboard = () => {
-  return <div className='flex flex-col h-full'>
+  return <div className='flex flex-col'>
     <Chart />
   </div>
 };

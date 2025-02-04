@@ -12,6 +12,7 @@ import IconButton from '@mui/material/IconButton'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 
+import Image from 'next/image'
 // Third-Party Imports
 import classnames from 'classnames'
 
@@ -151,7 +152,7 @@ const TaskCard = (props: TaskCardProps) => {
             </Menu>
           </div>
 
-          {task.image && <img src={task.image} alt='task Image' className='is-full rounded' />}
+          {task.image && <Image src={task.image} alt='task Image' className='is-full rounded' />}
           <Typography color='text.primary' className='max-is-[85%] break-words'>
             {task.title}
           </Typography>

@@ -3,7 +3,8 @@
 // React Imports
 import { useEffect, useState, useMemo } from 'react'
 
-import dayjs, { Dayjs } from 'dayjs';
+import type { Dayjs } from 'dayjs';
+import dayjs from 'dayjs';
 // MUI Imports
 import Card from '@mui/material/Card'
 import CardHeader from '@mui/material/CardHeader'
@@ -14,10 +15,9 @@ import Typography from '@mui/material/Typography'
 import IconButton from '@mui/material/IconButton'
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
-import { DateRange } from '@mui/x-date-pickers-pro/models'
+import type { DateRange } from '@mui/x-date-pickers-pro/models'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { SingleInputDateRangeField } from '@mui/x-date-pickers-pro/SingleInputDateRangeField'
-import { styled } from '@mui/material/styles'
 import TablePagination from '@mui/material/TablePagination'
 import type { TextFieldProps } from '@mui/material/TextField'
 // Third-party Imports
@@ -62,10 +62,6 @@ declare module '@tanstack/table-core' {
 }
 
 type UsersTypeWithAction = PaymentType
-
-
-// Styled Components
-const Icon = styled('i')({})
 
 const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
     // Rank the item
@@ -121,18 +117,16 @@ const HistoryListTable = ({ tableData }: { tableData?: PaymentType[] }) => {
     // States
     const [openPaymentRequestDrawer, setOpenPaymentRequestDrawer] = useState(false)
     const [rowSelection, setRowSelection] = useState({})
-    const [data, setData] = useState(...[tableData])
     const [editData, setEditData] = useState({})
-    const [filteredData, setFilteredData] = useState(data)
+    const [filteredData, setFilteredData] = useState(tableData)
     const [globalFilter, setGlobalFilter] = useState('')
 
     // Date Range Picker
     const [value, setValue] = useState<DateRange<Dayjs>>(() => [
-        dayjs('2022-04-17'),
-        dayjs('2022-04-21'),
+        dayjs('2021-12-25'),
+        dayjs('2022-01-25'),
     ]);
 
-    console.log(value)
     const deletePayment = async (id: number) => {
         await dispatch(deletePaymentFromAPI(id))
     }
@@ -212,7 +206,7 @@ const HistoryListTable = ({ tableData }: { tableData?: PaymentType[] }) => {
 
                         <Typography className='capitalize' color='text.primary'>
                             {/* {row.original.status} */}
-                            {row.original.status === 'Pending' ? <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,20a9,9,0,1,1,9-9A9,9,0,0,1,12,21Z" /><rect width="2" height="7" x="11" y="6" fill="currentColor" rx="1"><animateTransform attributeName="transform" dur="9s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12" /></rect><rect width="2" height="9" x="11" y="11" fill="currentColor" rx="1"><animateTransform attributeName="transform" dur="0.75s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12" /></rect></svg> : row.original.status === 'Success' ? <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"><g fill="currentColor" fill-rule="evenodd" clip-rule="evenodd"><path d="M15.62 3.596L7.815 12.81l-.728-.033L4 8.382l.754-.53l2.744 3.907L14.917 3z" /><path d="m7.234 8.774l4.386-5.178L10.917 3l-4.23 4.994zm-1.55.403l.548.78l-.547-.78zm-1.617 1.91l.547.78l-.799.943l-.728-.033L0 8.382l.754-.53l2.744 3.907l.57-.672z" /></g></svg> : <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 5L5 19M5 5l14 14" color="currentColor" /></svg>}
+                            {row.original.status === 'Pending' ? <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,20a9,9,0,1,1,9-9A9,9,0,0,1,12,21Z" /><rect width="2" height="7" x="11" y="6" fill="currentColor" rx="1"><animateTransform attributeName="transform" dur="9s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12" /></rect><rect width="2" height="9" x="11" y="11" fill="currentColor" rx="1"><animateTransform attributeName="transform" dur="0.75s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12" /></rect></svg> : row.original.status === 'Success' ? <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"><g fill="currentColor" fillRule="evenodd" clipRule="evenodd"><path d="M15.62 3.596L7.815 12.81l-.728-.033L4 8.382l.754-.53l2.744 3.907L14.917 3z" /><path d="m7.234 8.774l4.386-5.178L10.917 3l-4.23 4.994zm-1.55.403l.548.78l-.547-.78zm-1.617 1.91l.547.78l-.799.943l-.728-.033L0 8.382l.754-.53l2.744 3.907l.57-.672z" /></g></svg> : <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 5L5 19M5 5l14 14" color="currentColor" /></svg>}
                         </Typography>
                     </div>
                 )
@@ -225,7 +219,7 @@ const HistoryListTable = ({ tableData }: { tableData?: PaymentType[] }) => {
                         <IconButton disabled={!row.original.action} onClick={() => { if (row.original.id) deletePayment(row.original.id) }}>
                             <i className='ri-delete-bin-7-line text-textSecondary' />
                         </IconButton>
-                        <IconButton disabled={!row.original.action} onClick={() => { if (row.original.id) updatePayment(data?.find(product => product.id === row.original.id)) }}>
+                        <IconButton disabled={!row.original.action} onClick={() => { if (row.original.id) updatePayment(tableData?.find(product => product.id === row.original.id)) }}>
                             <i className='ri-edit-box-line text-textSecondary' />
                         </IconButton>
                     </div>
@@ -257,7 +251,7 @@ const HistoryListTable = ({ tableData }: { tableData?: PaymentType[] }) => {
 
         ],
         // eslint-disable-next-line react-hooks/exhaustive-deps
-        [data, filteredData]
+        [tableData, filteredData]
     )
 
     const table = useReactTable({
@@ -293,7 +287,6 @@ const HistoryListTable = ({ tableData }: { tableData?: PaymentType[] }) => {
         <>
             <Card>
                 <CardHeader title='Payment History' />
-                {/* <TableFilters setData={setFilteredData} tableData={data} /> */}
                 <Divider />
                 <div className='flex justify-between p-5 gap-4 flex-col items-start sm:flex-row sm:items-center'>
                     <div

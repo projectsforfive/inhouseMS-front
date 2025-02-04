@@ -14,7 +14,7 @@ import FormHelperText from '@mui/material/FormHelperText';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import { useDispatch,useSelector } from 'react-redux';
-import { RootState } from '@/redux/index';
+import type { RootState } from '@/redux/index';
 import { addPaymentToAPI, updatePaymentInAPI } from '@/redux/slices/payment.slice';
 import type { PaymentType } from '@/types/paymentTypes';
 
@@ -41,7 +41,7 @@ const defaultFormData: PaymentType = {
 const PaymentRequestsDrawer = (props: Props) => {
   const { open, handleClose, paymentData } = props;
   const dispatch = useDispatch<any>();
-  const { loading, error } = useSelector((state: RootState) => state.payment);
+  const { loading } = useSelector((state: RootState) => state.payment);
   const [formData, setFormData] = useState<PaymentType>(defaultFormData);
 
   // Effect to populate formData if paymentData is provided
