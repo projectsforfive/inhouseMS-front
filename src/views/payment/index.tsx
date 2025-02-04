@@ -9,7 +9,6 @@ import Grid from '@mui/material/Grid';
 
 // Component Imports
 import HistoryTable from './HistoryTable';
-// import UserListCards from './UserListCards'
 
 const UserList = () => {
   const dispatch = useDispatch<any>();
