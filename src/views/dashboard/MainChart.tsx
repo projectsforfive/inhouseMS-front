@@ -19,7 +19,7 @@ const Utils = {
     },
 };
 
-const MyStackedBarChart: React.FC = () => {
+const MainChart: React.FC = () => {
     const chartRef = useRef<HTMLCanvasElement | null>(null);
 
     useEffect(() => {
@@ -67,4 +67,4 @@ const MyStackedBarChart: React.FC = () => {
     return <div className='w-[60%]'><canvas ref={chartRef} width="100" height="50" style={{ width: "100%", height: "50vh" }}></canvas></div>;
 };
 
-export default MyStackedBarChart;
+export default MainChart;

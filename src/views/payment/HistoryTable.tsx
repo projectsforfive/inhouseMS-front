@@ -123,11 +123,10 @@ const HistoryListTable = ({ tableData }: { tableData?: PaymentType[] }) => {
 
     // Date Range Picker
     const [value, setValue] = useState<DateRange<Dayjs>>(() => [
-        dayjs('2022-04-17'),
-        dayjs('2022-04-21'),
+        dayjs('2021-12-25'),
+        dayjs('2022-01-25'),
     ]);
 
-    console.log(value)
     const deletePayment = async (id: number) => {
         await dispatch(deletePaymentFromAPI(id))
     }
