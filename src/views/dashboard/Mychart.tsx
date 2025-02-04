@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
-import { Chart, registerables, ChartData, ChartOptions } from 'chart.js';
+import type { ChartData, ChartOptions } from 'chart.js';
+import { Chart, registerables } from 'chart.js';
 
 // Register all necessary components from Chart.js
 Chart.register(...registerables);

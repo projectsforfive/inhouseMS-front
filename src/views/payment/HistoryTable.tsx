@@ -3,7 +3,8 @@
 // React Imports
 import { useEffect, useState, useMemo } from 'react'
 
-import dayjs, { Dayjs } from 'dayjs';
+import type { Dayjs } from 'dayjs';
+import dayjs from 'dayjs';
 // MUI Imports
 import Card from '@mui/material/Card'
 import CardHeader from '@mui/material/CardHeader'
@@ -14,10 +15,9 @@ import Typography from '@mui/material/Typography'
 import IconButton from '@mui/material/IconButton'
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
-import { DateRange } from '@mui/x-date-pickers-pro/models'
+import type { DateRange } from '@mui/x-date-pickers-pro/models'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { SingleInputDateRangeField } from '@mui/x-date-pickers-pro/SingleInputDateRangeField'
-import { styled } from '@mui/material/styles'
 import TablePagination from '@mui/material/TablePagination'
 import type { TextFieldProps } from '@mui/material/TextField'
 // Third-party Imports
@@ -62,10 +62,6 @@ declare module '@tanstack/table-core' {
 }
 
 type UsersTypeWithAction = PaymentType
-
-
-// Styled Components
-const Icon = styled('i')({})
 
 const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
     // Rank the item
@@ -121,9 +117,8 @@ const HistoryListTable = ({ tableData }: { tableData?: PaymentType[] }) => {
     // States
     const [openPaymentRequestDrawer, setOpenPaymentRequestDrawer] = useState(false)
     const [rowSelection, setRowSelection] = useState({})
-    const [data, setData] = useState(...[tableData])
     const [editData, setEditData] = useState({})
-    const [filteredData, setFilteredData] = useState(data)
+    const [filteredData, setFilteredData] = useState(tableData)
     const [globalFilter, setGlobalFilter] = useState('')
 
     // Date Range Picker
@@ -225,7 +220,7 @@ const HistoryListTable = ({ tableData }: { tableData?: PaymentType[] }) => {
                         <IconButton disabled={!row.original.action} onClick={() => { if (row.original.id) deletePayment(row.original.id) }}>
                             <i className='ri-delete-bin-7-line text-textSecondary' />
                         </IconButton>
-                        <IconButton disabled={!row.original.action} onClick={() => { if (row.original.id) updatePayment(data?.find(product => product.id === row.original.id)) }}>
+                        <IconButton disabled={!row.original.action} onClick={() => { if (row.original.id) updatePayment(tableData?.find(product => product.id === row.original.id)) }}>
                             <i className='ri-edit-box-line text-textSecondary' />
                         </IconButton>
                     </div>
@@ -257,7 +252,7 @@ const HistoryListTable = ({ tableData }: { tableData?: PaymentType[] }) => {
 
         ],
         // eslint-disable-next-line react-hooks/exhaustive-deps
-        [data, filteredData]
+        [tableData, filteredData]
     )
 
     const table = useReactTable({
@@ -293,7 +288,6 @@ const HistoryListTable = ({ tableData }: { tableData?: PaymentType[] }) => {
         <>
             <Card>
                 <CardHeader title='Payment History' />
-                {/* <TableFilters setData={setFilteredData} tableData={data} /> */}
                 <Divider />
                 <div className='flex justify-between p-5 gap-4 flex-col items-start sm:flex-row sm:items-center'>
                     <div

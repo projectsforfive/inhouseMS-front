@@ -223,6 +223,7 @@ const VerticalNav = (props: VerticalNavProps) => {
             className={classnames(verticalNavClasses.image, styles.root)}
             src={backgroundImage}
             alt='verticalNav background'
+            
           />
         )}
       </StyledVerticalNavContainer>

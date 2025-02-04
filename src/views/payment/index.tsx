@@ -12,7 +12,7 @@ import HistoryTable from './HistoryTable';
 
 const UserList = () => {
   const dispatch = useDispatch<any>();
-  const { tableData, loading, error } = useSelector((state: RootState) => state.payment);
+  const { tableData } = useSelector((state: RootState) => state.payment);
   useEffect(() => {
     dispatch(fetchPayments());
   }, [dispatch]);

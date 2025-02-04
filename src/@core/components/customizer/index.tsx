@@ -93,7 +93,6 @@ const DebouncedColorPicker = (props: DebouncedColorPickerProps) => {
 const Customizer = ({ breakpoint = 'lg', dir = 'ltr' }: CustomizerProps) => {
   // States
   const [isOpen, setIsOpen] = useState(false);
-  const [direction, setDirection] = useState(dir);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   // Refs
