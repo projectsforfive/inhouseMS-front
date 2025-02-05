@@ -44,7 +44,7 @@ import styles from './styles.module.css';
 
 type CustomizerProps = {
   breakpoint?: Breakpoint | 'xxl' | `${number}px` | `${number}rem` | `${number}em`;
-  dir?: Direction;
+  // dir?: Direction;
   disableDirection?: boolean;
 };
 
@@ -90,12 +90,11 @@ const DebouncedColorPicker = (props: DebouncedColorPickerProps) => {
   );
 };
 
-const Customizer = ({ breakpoint = 'lg', dir = 'ltr' }: CustomizerProps) => {
+const Customizer = ({ breakpoint = 'lg' }: CustomizerProps) => {
   // States
   const [isOpen, setIsOpen] = useState(false);
-  const [direction, setDirection] = useState(dir);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  console.log(direction);
+  // console.log(direction);
   // Refs
   const anchorRef = useRef<HTMLDivElement | null>(null);
 
@@ -145,7 +144,7 @@ const Customizer = ({ breakpoint = 'lg', dir = 'ltr' }: CustomizerProps) => {
   const handleChange = (field: keyof Settings | 'direction', value: Settings[keyof Settings] | Direction) => {
     // Update direction state
     if (field === 'direction') {
-      setDirection(value as Direction);
+      // setDirection(value as Direction);
     } else {
       // Update settings in cookie
       updateSettings({ [field]: value });

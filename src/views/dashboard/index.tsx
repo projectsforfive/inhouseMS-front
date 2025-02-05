@@ -1,7 +1,11 @@
 'use client';
 
+import Chart from './Chart';
+
 const Dashboard = () => {
-  return <h1>Dashboard</h1>;
+  return <div className='flex flex-col'>
+    <Chart />
+  </div>
 };
 
 export default Dashboard;
