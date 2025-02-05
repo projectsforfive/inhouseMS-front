@@ -1,5 +1,6 @@
-export type TaskType = {
+export type CardType = {
   id: number
+  board: number
   title: string
   badgeText?: string[]
   attachments?: number
@@ -9,14 +10,25 @@ export type TaskType = {
   dueDate?: Date
 }
 
-export type ColumnType = {
+export type CardlistType = {
   id: number
+  board: number
   title: string
-  taskIds: number[]
+  cardIds: number[]
 }
 
 export type InterviewType = {
-  columns: ColumnType[]
-  tasks: TaskType[]
-  currentTaskId?: number
+  cardlists: CardlistType[]
+  cards: CardType[]
+  currentCardId?: number
+  boards: BoardType[]
 }
+
+export type BoardType = {
+    id: number,
+    title: string,
+    cardlist: [],
+    color: string,
+    stared: boolean,
+    number: number,
+  }

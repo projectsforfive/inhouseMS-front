@@ -25,26 +25,26 @@ import { minLength, nonEmpty, object, pipe, string } from 'valibot'
 import type { InferInput } from 'valibot'
 
 // Type Imports
-import type { ColumnType, TaskType } from '@/types/apps/interviewTypes'
+import type { CardlistType, CardType } from '@/types/apps/interviewTypes'
 import type { AppDispatch } from '@/redux'
 
 // Slice Imports
-import { editTask, deleteTask } from '@/redux/slices/interview'
+import { editCard, deleteCard } from '@/redux/slices/card.slice'
 
 // Component Imports
 import CustomAvatar from '@core/components/mui/Avatar'
 import AppReactDatepicker from '@/libs/styles/AppReactDatepicker'
 
 // Data Imports
-import { chipColor } from './TaskCard'
+import { chipColor } from './Cards'
 
 type InterviewDrawerProps = {
   drawerOpen: boolean
   dispatch: AppDispatch
   setDrawerOpen: (value: boolean) => void
-  task: TaskType
-  columns: ColumnType[]
-  setColumns: (value: ColumnType[]) => void
+  card: CardType
+  cardlists: CardlistType[]
+  setCardlists: (value: CardlistType[]) => void
 }
 
 type FormData = InferInput<typeof schema>
@@ -55,11 +55,11 @@ const schema = object({
 
 const InterviewDrawer = (props: InterviewDrawerProps) => {
   // Props
-  const { drawerOpen, dispatch, setDrawerOpen, task, columns, setColumns } = props
+  const { drawerOpen, dispatch, setDrawerOpen, card, cardlists, setCardlists } = props
 
   // States
-  const [date, setDate] = useState<Date | undefined>(task.dueDate)
-  const [badgeText, setBadgeText] = useState(task.badgeText || [])
+  const [date, setDate] = useState<Date | undefined>(card.dueDate)
+  const [badgeText, setBadgeText] = useState(card.badgeText || [])
   const [fileName, setFileName] = useState<string>('')
   const [comment, setComment] = useState<string>('')
 
@@ -74,7 +74,7 @@ const InterviewDrawer = (props: InterviewDrawerProps) => {
     formState: { errors }
   } = useForm<FormData>({
     defaultValues: {
-      title: task.title
+      title: card.title
     },
     resolver: valibotResolver(schema)
   })
@@ -91,9 +91,9 @@ const InterviewDrawer = (props: InterviewDrawerProps) => {
   // Close Drawer
   const handleClose = () => {
     setDrawerOpen(false)
-    reset({ title: task.title })
-    setBadgeText(task.badgeText || [])
-    setDate(task.dueDate)
+    reset({ title: card.title })
+    setBadgeText(card.badgeText || [])
+    setDate(card.dueDate)
     setFileName('')
     setComment('')
 
@@ -102,33 +102,33 @@ const InterviewDrawer = (props: InterviewDrawerProps) => {
     }
   }
 
-  // Update Task
-  const updateTask = (data: FormData) => {
-    dispatch(editTask({ id: task.id, title: data.title, badgeText, dueDate: date }))
+  // Update card
+  const updatecard = (data: FormData) => {
+    dispatch(editCard({ id: card.id, title: data.title, badgeText, dueDate: date }))
     handleClose()
   }
 
   // Handle Reset
   const handleReset = () => {
     setDrawerOpen(false)
-    dispatch(deleteTask(task.id))
+    dispatch(deleteCard(card.id))
 
-    const updatedColumns = columns.map(column => {
+    const updatedcardlists = cardlists.map(column => {
       return {
         ...column,
-        taskIds: column.taskIds.filter(taskId => taskId !== task.id)
+        cardIds: column.cardIds.filter(cardId => cardId !== card.id)
       }
     })
 
-    setColumns(updatedColumns)
+    setCardlists(updatedcardlists)
   }
 
-  // To set the initial values according to the task
+  // To set the initial values according to the card
   useEffect(() => {
-    reset({ title: task.title })
-    setBadgeText(task.badgeText || [])
-    setDate(task.dueDate)
-  }, [task, reset])
+    reset({ title: card.title })
+    setBadgeText(card.badgeText || [])
+    setDate(card.dueDate)
+  }, [card, reset])
 
   return (
     <div>
@@ -141,13 +141,13 @@ const InterviewDrawer = (props: InterviewDrawerProps) => {
         onClose={handleClose}
       >
         <div className='flex justify-between items-center pli-5 plb-4 border-be'>
-          <Typography variant='h5'>Edit Task</Typography>
+          <Typography variant='h5'>Edit card</Typography>
           <IconButton size='small' onClick={handleClose}>
             <i className='ri-close-line text-2xl' />
           </IconButton>
         </div>
         <div className='p-6'>
-          <form className='flex flex-col gap-y-5' onSubmit={handleSubmit(updateTask)}>
+          <form className='flex flex-col gap-y-5' onSubmit={handleSubmit(updatecard)}>
             <Controller
               name='title'
               control={control}
@@ -205,7 +205,7 @@ const InterviewDrawer = (props: InterviewDrawerProps) => {
             <div className='flex flex-col gap-y-1'>
               <Typography variant='body2'>Assigned</Typography>
               <div className='flex gap-1'>
-                {task.assigned?.map((avatar, index) => (
+                {card.assigned?.map((avatar, index) => (
                   <Tooltip title={avatar.name} key={index}>
                     <CustomAvatar key={index} src={avatar.src} size={26} className='cursor-pointer' />
                   </Tooltip>

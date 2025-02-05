@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 // React Imports
 import { useState } from 'react'
 
@@ -12,17 +13,17 @@ import IconButton from '@mui/material/IconButton'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 
-import Image from 'next/image'
+// import Image from 'next/image'
 // Third-Party Imports
 import classnames from 'classnames'
 
 // Type Imports
-import type { ColumnType, TaskType } from '@/types/apps/interviewTypes'
+import type { CardlistType, CardType } from '@/types/apps/interviewTypes'
 import type { AppDispatch } from '@/redux'
 import type { ThemeColor } from '@core/types'
 
 // Slice Imports
-import { getCurrentTask, deleteTask } from '@/redux/slices/interview'
+import { getCurrentCard, deleteCard } from '@/redux/slices/card.slice'
 
 // Component Imports
 import CustomAvatar from '@core/components/mui/Avatar'
@@ -34,15 +35,15 @@ type chipColorType = {
   color: ThemeColor
 }
 
-type TaskCardProps = {
-  task: TaskType
+type cardCardProps = {
+  card: CardType
   dispatch: AppDispatch
-  column: ColumnType
-  setColumns: (value: ColumnType[]) => void
-  columns: ColumnType[]
+  cardlist: CardlistType
+  setCardlists: (value: CardlistType[]) => void
+  cardlists: CardlistType[]
   setDrawerOpen: (value: boolean) => void
-  tasksList: (TaskType | undefined)[]
-  setTasksList: (value: (TaskType | undefined)[]) => void
+  cardsList: (CardType | undefined)[]
+  setCardsList: (value: (CardType | undefined)[]) => void
 }
 
 export const chipColor: { [key: string]: chipColorType } = {
@@ -54,9 +55,9 @@ export const chipColor: { [key: string]: chipColorType } = {
   'Charts & Map': { color: 'primary' }
 }
 
-const TaskCard = (props: TaskCardProps) => {
+const Cards = (props: cardCardProps) => {
   // Props
-  const { task, dispatch, column, setColumns, columns, setDrawerOpen, tasksList, setTasksList } = props
+  const { card, dispatch, cardlist, setCardlists, cardlists, setDrawerOpen, cardsList, setCardsList } = props
 
   // States
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
@@ -74,28 +75,28 @@ const TaskCard = (props: TaskCardProps) => {
     setMenuOpen(false)
   }
 
-  // Handle Task Click
-  const handleTaskClick = () => {
+  // Handle Card Click
+  const handleCardClick = () => {
     setDrawerOpen(true)
-    dispatch(getCurrentTask(task.id))
+    dispatch(getCurrentCard(card.id))
   }
 
-  // Delete Task
-  const handleDeleteTask = () => {
-    dispatch(deleteTask(task.id))
-    setTasksList(tasksList.filter(taskItem => taskItem?.id !== task.id))
+  // Delete Card
+  const handleDeleteCard = () => {
+    dispatch(deleteCard(card.id))
+    setCardsList(cardsList.filter(cardItem => cardItem?.id !== card.id))
 
-    const newTaskIds = column.taskIds.filter(taskId => taskId !== task.id)
-    const newColumn = { ...column, taskIds: newTaskIds }
-    const newColumns = columns.map(col => (col.id === column.id ? newColumn : col))
+    const newCardIds = cardlist.cardIds.filter(cardId => cardId !== card.id)
+    const newCardlist = { ...cardlist, cardIds: newCardIds }
+    const newCardlists = cardlists.map(col => (col.id === cardlist.id ? newCardlist : col))
 
-    setColumns(newColumns)
+    setCardlists(newCardlists)
   }
 
   // Handle Delete
   const handleDelete = () => {
     handleClose()
-    handleDeleteTask()
+    handleDeleteCard()
   }
 
   return (
@@ -105,12 +106,12 @@ const TaskCard = (props: TaskCardProps) => {
           'item-draggable is-[16.5rem] cursor-grab active:cursor-grabbing overflow-visible mbe-4',
           styles.card
         )}
-        onClick={() => handleTaskClick()}
+        onClick={() => handleCardClick()}
       >
         <CardContent className='flex flex-col gap-y-2 items-start relative overflow-hidden'>
-          {task.badgeText && task.badgeText.length > 0 && (
+          {card.badgeText && card.badgeText.length > 0 && (
             <div className='flex flex-wrap items-center justify-start gap-2 is-full max-is-[85%]'>
-              {task.badgeText.map(
+              {card.badgeText.map(
                 (badge, index) =>
                   chipColor[badge]?.color && (
                     <Chip variant='tonal' key={index} label={badge} size='small' color={chipColor[badge].color} />
@@ -140,8 +141,8 @@ const TaskCard = (props: TaskCardProps) => {
               open={Boolean(anchorEl)}
               onClose={handleClose}
             >
-              <MenuItem onClick={handleClose}>Duplicate Task</MenuItem>
-              <MenuItem onClick={handleClose}>Copy Task Link</MenuItem>
+              <MenuItem onClick={handleClose}>Duplicate card</MenuItem>
+              <MenuItem onClick={handleClose}>Copy card Link</MenuItem>
               <MenuItem
                 onClick={() => {
                   handleDelete()
@@ -152,34 +153,34 @@ const TaskCard = (props: TaskCardProps) => {
             </Menu>
           </div>
 
-          {task.image && <Image src={task.image} alt='task Image' className='is-full rounded' />}
+          {card.image && <img src={card.image} alt='card Image' className='is-full rounded' />}
           <Typography color='text.primary' className='max-is-[85%] break-words'>
-            {task.title}
+            {card.title}
           </Typography>
-          {(task.attachments !== undefined && task.attachments > 0) ||
-          (task.comments !== undefined && task.comments > 0) ||
-          (task.assigned !== undefined && task.assigned.length > 0) ? (
+          {(card.attachments !== undefined && card.attachments > 0) ||
+            (card.comments !== undefined && card.comments > 0) ||
+            (card.assigned !== undefined && card.assigned.length > 0) ? (
             <div className='flex justify-between items-center gap-4 is-full'>
-              {(task.attachments !== undefined && task.attachments > 0) ||
-              (task.comments !== undefined && task.comments > 0) ? (
+              {(card.attachments !== undefined && card.attachments > 0) ||
+                (card.comments !== undefined && card.comments > 0) ? (
                 <div className='flex gap-4'>
-                  {task.attachments !== undefined && task.attachments > 0 && (
+                  {card.attachments !== undefined && card.attachments > 0 && (
                     <div className='flex items-center gap-1'>
                       <i className='ri-attachment-2 text-xl text-textSecondary' />
-                      <Typography color='text.secondary'>{task.attachments}</Typography>
+                      <Typography color='text.secondary'>{card.attachments}</Typography>
                     </div>
                   )}
-                  {task.comments !== undefined && task.comments > 0 && (
+                  {card.comments !== undefined && card.comments > 0 && (
                     <div className='flex items-center gap-1'>
                       <i className='ri-wechat-line text-xl text-textSecondary' />
-                      <Typography color='text.secondary'>{task.comments}</Typography>
+                      <Typography color='text.secondary'>{card.comments}</Typography>
                     </div>
                   )}
                 </div>
               ) : null}
-              {task.assigned !== undefined && task.assigned.length > 0 && (
+              {card.assigned !== undefined && card.assigned.length > 0 && (
                 <AvatarGroup max={4} className='pull-up'>
-                  {task.assigned?.map((avatar, index) => (
+                  {card.assigned?.map((avatar, index) => (
                     <Tooltip title={avatar.name} key={index}>
                       <CustomAvatar
                         key={index}
@@ -200,4 +201,4 @@ const TaskCard = (props: TaskCardProps) => {
   )
 }
 
-export default TaskCard
+export default Cards
