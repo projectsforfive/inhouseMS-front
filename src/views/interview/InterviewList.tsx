@@ -13,132 +13,135 @@ import { animations } from '@formkit/drag-and-drop'
 import classnames from 'classnames'
 
 // Type Imports
-import type { TaskType, ColumnType, InterviewType } from '@/types/apps/interviewTypes'
+import type { CardType, CardlistType, InterviewType } from '@/types/apps/interviewTypes'
 import type { AppDispatch } from '@/redux'
 
 // Slice Imports
-import { addTask, editColumn, deleteColumn, updateColumnTaskIds } from '@/redux/slices/interview'
+import { addCard, editCardlist, deleteCardlist, updateCardlistCardIds } from '@/redux/slices/card.slice'
 
 // Component Imports
 import OptionMenu from '@core/components/option-menu'
-import TaskCard from './TaskCard'
-import NewTask from './NewTask'
+import Cards from './Cards'
+import NewCard from './NewCard'
 
 // Styles Imports
 import styles from './styles.module.css'
 
 type InterviewListProps = {
-  column: ColumnType
-  tasks: (TaskType | undefined)[]
+  cardlist: CardlistType
+  cards: (CardType | undefined)[]
   dispatch: AppDispatch
   store: InterviewType
   setDrawerOpen: (value: boolean) => void
-  columns: ColumnType[]
-  setColumns: (value: ColumnType[]) => void
-  currentTask: TaskType | undefined
+  cardlists: CardlistType[]
+  setCardlists: (value: CardlistType[]) => void
+  currentCard: CardType | undefined
 }
 
 const InterviewList = (props: InterviewListProps) => {
   // Props
-  const { column, tasks, dispatch, store, setDrawerOpen, columns, setColumns, currentTask } = props
+  const { cardlist, cards, dispatch, store, setDrawerOpen, cardlists, setCardlists, currentCard } = props
 
   // States
   const [editDisplay, setEditDisplay] = useState(false)
-  const [title, setTitle] = useState(column.title)
+  const [title, setTitle] = useState(cardlist.title)
 
   // Hooks
-  const [tasksListRef, tasksList, setTasksList] = useDragAndDrop(tasks, {
-    group: 'tasksList',
+  const [cardsListRef, cardsList, setCardsList] = useDragAndDrop(cards, {
+    group: 'cardsList',
     plugins: [animations()],
     draggable: el => el.classList.contains('item-draggable')
   })
 
-  // Add New Task
-  const addNewTask = (title: string) => {
-    dispatch(addTask({ columnId: column.id, title: title }))
+  // Add New card
+  const addNewCard = (title: string) => {
+    dispatch(addCard({ cardlistId: cardlist.id, title: title }))
 
-    setTasksList([...tasksList, { id: store.tasks[store.tasks.length - 1].id + 1, title }])
+    setCardsList([...cardsList, {
+      id: store.cards[store.cards.length - 1].id + 1, title,
+      board: 1
+    }])
 
-    const newColumns = columns.map(col => {
-      if (col.id === column.id) {
-        return { ...col, taskIds: [...col.taskIds, store.tasks[store.tasks.length - 1].id + 1] }
+    const newCardlists = cardlists.map(col => {
+      if (col.id === cardlist.id) {
+        return { ...col, cardIds: [...col.cardIds, store.cards[store.cards.length - 1].id + 1] }
       }
 
       return col
     })
 
-    setColumns(newColumns)
+    setCardlists(newCardlists)
   }
 
   // Handle Submit Edit
   const handleSubmitEdit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setEditDisplay(!editDisplay)
-    dispatch(editColumn({ id: column.id, title }))
+    dispatch(editCardlist({ id: cardlist.id, title }))
 
-    const newColumn = columns.map(col => {
-      if (col.id === column.id) {
+    const newCardlist = cardlists.map(col => {
+      if (col.id === cardlist.id) {
         return { ...col, title }
       }
 
       return col
     })
 
-    setColumns(newColumn)
+    setCardlists(newCardlist)
   }
 
   // Cancel Edit
   const cancelEdit = () => {
     setEditDisplay(!editDisplay)
-    setTitle(column.title)
+    setTitle(cardlist.title)
   }
 
-  // Delete Column
-  const handleDeleteColumn = () => {
-    dispatch(deleteColumn({ columnId: column.id }))
-    setColumns(columns.filter(col => col.id !== column.id))
+  // Delete cardlist
+  const handleDeleteCardlist = () => {
+    dispatch(deleteCardlist({ cardlistId: cardlist.id }))
+    setCardlists(cardlists.filter(col => col.id !== cardlist.id))
   }
 
-  // Update column taskIds on drag and drop
+  // Update cardlist cardIds on drag and drop
   useEffect(() => {
-    if (tasksList !== tasks) {
-      dispatch(updateColumnTaskIds({ id: column.id, tasksList }))
+    if (cardsList !== cards) {
+      dispatch(updateCardlistCardIds({ id: cardlist.id, cardsList }))
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tasksList])
+  }, [cardsList])
 
-  // To update the tasksList when a task is edited
+  // To update the cardsList when a card is edited
   useEffect(() => {
-    const newTasks = tasksList.map(task => {
-      if (task?.id === currentTask?.id) {
-        return currentTask
+    const newCards = cardsList.map(card => {
+      if (card?.id === currentCard?.id) {
+        return currentCard
       }
 
-      return task
+      return card
     })
 
-    if (currentTask !== tasksList.find(task => task?.id === currentTask?.id)) {
-      setTasksList(newTasks)
+    if (currentCard !== cardsList.find(card => card?.id === currentCard?.id)) {
+      setCardsList(newCards)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentTask])
+  }, [currentCard])
 
-  // To update the tasksList when columns are updated
+  // To update the cardsList when cardlists are updated
   useEffect(() => {
-    let taskIds: ColumnType['taskIds'] = []
+    let cardIds: CardlistType['cardIds'] = []
 
-    columns.map(col => {
-      taskIds = [...taskIds, ...col.taskIds]
+    cardlists.map(col => {
+      cardIds = [...cardIds, ...col.cardIds]
     })
 
-    const newTasksList = tasksList.filter(task => task && taskIds.includes(task.id))
+    const newCardsList = cardsList.filter(card => card && cardIds.includes(card.id))
 
-    setTasksList(newTasksList)
+    setCardsList(newCardsList)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [columns])
+  }, [cardlists])
 
   return (
-    <div ref={tasksListRef as RefObject<HTMLDivElement>} className='flex flex-col is-[16.5rem]'>
+    <div ref={cardsListRef as RefObject<HTMLDivElement>} className='flex flex-col is-[16.5rem]'>
       {editDisplay ? (
         <form
           className='flex items-center mbe-4'
@@ -162,11 +165,11 @@ const InterviewList = (props: InterviewListProps) => {
           id='no-drag'
           className={classnames(
             'flex items-center justify-between is-[16.5rem] bs-[2.125rem] mbe-4',
-            styles.interviewColumn
+            styles.interviewCardlist
           )}
         >
           <Typography variant='h5' noWrap className='max-is-[80%]'>
-            {column.title}
+            {cardlist.title}
           </Typography>
           <div className='flex items-center'>
             <i className={classnames('ri-drag-move-fill text-textSecondary list-handle', styles.drag)} />
@@ -184,30 +187,30 @@ const InterviewList = (props: InterviewListProps) => {
                 {
                   text: 'Delete',
                   icon: 'ri-delete-bin-line',
-                  menuItemProps: { className: 'flex items-center gap-2', onClick: handleDeleteColumn }
+                  menuItemProps: { className: 'flex items-center gap-2', onClick: handleDeleteCardlist }
                 }
               ]}
             />
           </div>
         </div>
       )}
-      {tasksList.map(
-        task =>
-          task && (
-            <TaskCard
-              key={task.id}
-              task={task}
+      {cardsList.map(
+        card =>
+          card && (
+            <Cards
+              key={card.id}
+              card={card}
               dispatch={dispatch}
-              column={column}
-              setColumns={setColumns}
-              columns={columns}
+              cardlist={cardlist}
+              setCardlists={setCardlists}
+              cardlists={cardlists}
               setDrawerOpen={setDrawerOpen}
-              tasksList={tasksList}
-              setTasksList={setTasksList}
+              cardsList={cardsList}
+              setCardsList={setCardsList}
             />
           )
       )}
-      <NewTask addTask={addNewTask} />
+      <NewCard addCard={addNewCard} />
     </div>
   )
 }

@@ -23,12 +23,12 @@ const TextField = styled(MuiTextField)({
 type FormData = InferInput<typeof schema>
 
 const schema = object({
-  title: pipe(string(), nonEmpty('Title is required'), minLength(1))
+  content: pipe(string(), nonEmpty('Content is required'), minLength(1))
 })
 
-const NewColumn = ({ addNewColumn }: { addNewColumn: (title: string) => void }) => {
+const NewCard = ({ addCard }: { addCard: (content: string) => void }) => {
   // States
-  const [display, setDisplay] = useState(false)
+  const [displayNewItem, setDisplayNewItem] = useState(false)
 
   // Hooks
   const {
@@ -38,62 +38,62 @@ const NewColumn = ({ addNewColumn }: { addNewColumn: (title: string) => void }) 
     formState: { errors }
   } = useForm<FormData>({
     defaultValues: {
-      title: ''
+      content: ''
     },
     resolver: valibotResolver(schema)
   })
 
-  // Display the Add New form
+  // Display the Add New Task form
   const toggleDisplay = () => {
-    setDisplay(!display)
+    setDisplayNewItem(!displayNewItem)
   }
 
-  // Handle the Add New form
+  // Handle the Add New Task form
   const onSubmit = (data: FormData) => {
-    addNewColumn(data.title)
-    setDisplay(false)
-    reset({ title: '' })
+    addCard(data.content)
+    setDisplayNewItem(false)
+    reset({ content: '' })
   }
 
   // Handle reset
   const handleReset = () => {
     toggleDisplay()
-    reset({ title: '' })
+    reset({ content: '' })
   }
 
   return (
-    <div className='flex flex-col gap-4 items-start min-is-[16.5rem] is-[16.5rem]'>
-      <Typography
-        variant='h5'
-        color='text.primary'
-        onClick={toggleDisplay}
-        className='flex items-center gap-1 cursor-pointer'
-      >
+    <div className='flex flex-col gap-4 items-start'>
+      <Typography onClick={toggleDisplay} color='text.primary' className='flex items-center gap-1 cursor-pointer'>
         <i className='ri-add-line text-base' />
-        <span className='whitespace-nowrap'>Add New</span>
+        <span>Add New Item</span>
       </Typography>
-      {display && (
-        <form
-          className='flex flex-col gap-4 is-[16.5rem]'
-          onSubmit={handleSubmit(onSubmit)}
-          onKeyDown={e => {
-            if (e.key === 'Escape') {
-              handleReset()
-            }
-          }}
-        >
+      {displayNewItem && (
+        <form className='flex flex-col gap-4 min-is-[16.5rem]' onSubmit={handleSubmit(onSubmit)}>
           <Controller
-            name='title'
+            name='content'
             control={control}
             render={({ field }) => (
               <TextField
                 fullWidth
+                multiline
                 autoFocus
+                rows={2}
+                onKeyDown={e => {
+                  if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault()
+                    handleSubmit(onSubmit)(e)
+                  }
+
+                  if (e.key === 'Escape') {
+                    handleReset()
+                  }
+                }}
+                label='Add Content'
+                size='small'
                 variant='outlined'
-                label='Board Title'
                 {...field}
-                error={Boolean(errors.title)}
-                helperText={errors.title ? errors.title.message : null}
+                error={Boolean(errors.content)}
+                helperText={errors.content ? errors.content.message : null}
               />
             )}
           />
@@ -118,4 +118,4 @@ const NewColumn = ({ addNewColumn }: { addNewColumn: (title: string) => void }) 
   )
 }
 
-export default NewColumn
+export default NewCard

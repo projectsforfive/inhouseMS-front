@@ -1,6 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { combineReducers } from 'redux';
-import interviewReducer from '@/redux/slices/interview'
+import cardReducer from '@/redux/slices/card.slice'
 
 
 import authReducer from './slices/auth.slice';
@@ -13,7 +13,7 @@ const rootReducer = combineReducers({
 export const store = configureStore({
   reducer: {
     rootReducer,
-    interviewReducer,
+    cardReducer,
     payment: paymentReducer
   },
   middleware: getDefaultMiddleware => getDefaultMiddleware({ serializableCheck: false })
