@@ -14,6 +14,16 @@ interface TeamChartProps {
     teams: TeamMember[];
 }
 
+// Function to generate a color palette
+const generateColors = (numColors: number) => {
+    const colors = [];
+    for (let i = 0; i < numColors; i++) {
+        const hue = (i * 360) / numColors; // Distribute colors evenly across the color wheel
+        colors.push(`hsl(${hue}, 70%, 50%)`); // HSL format for vibrant colors
+    }
+    return colors;
+};
+
 const TeamChart: React.FC<TeamChartProps> = ({ teams }) => {
     const chartRef = useRef<HTMLCanvasElement | null>(null);
 
@@ -22,7 +32,7 @@ const TeamChart: React.FC<TeamChartProps> = ({ teams }) => {
 
         if (!ctx) return; // Ensure we have a valid canvas context
 
-        // Update labels and data whenever teams changes
+        // Prepare data for the chart
         const labels = teams.map((member) => member.name);
         const data: ChartData<'pie'> = {
             labels: labels,
@@ -30,11 +40,7 @@ const TeamChart: React.FC<TeamChartProps> = ({ teams }) => {
                 {
                     label: 'Average Income',
                     data: teams.map((team) => team.average_income),
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 0.5)',
-                        'rgba(54, 162, 235, 0.5)',
-                        'rgba(255, 206, 86, 0.5)',
-                    ],
+                    backgroundColor: generateColors(teams.length), // Generate colors for each team
                 }
             ]
         };
@@ -47,7 +53,7 @@ const TeamChart: React.FC<TeamChartProps> = ({ teams }) => {
                 },
                 title: {
                     display: true,
-                    text: 'Chart.js Pie Chart'
+                    text: 'Income per Team',
                 }
             }
         };
