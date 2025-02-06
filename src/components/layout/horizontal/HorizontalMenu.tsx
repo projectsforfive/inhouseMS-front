@@ -88,12 +88,15 @@ const HorizontalMenu = () => {
         <MenuItem href='/dashboard' icon={<i className='ri-home-smile-line' />}>
           Dashboard
         </MenuItem>
-        {/* <MenuItem href='/interview' icon={<FiCommand />}>
+         <MenuItem href='/interview' icon={<i className='ri-home-smile-line' />}>
           Interview
         </MenuItem>
-        <MenuItem href='/payment' icon={<FaAmazonPay />}> */}
-          {/* Payment
-        </MenuItem> */}
+        <MenuItem href='/payment' icon={<i className='ri-home-smile-line' />}>
+          Payment
+        </MenuItem>
+        <MenuItem href='/profile' icon={<i className='ri-home-smile-line' />}>
+          Profile
+        </MenuItem>
         <MenuItem href='/about' icon={<i className='ri-information-line' />}>
           About
         </MenuItem>
