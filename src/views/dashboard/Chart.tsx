@@ -5,12 +5,12 @@ import TeamChart from './TeamChart';
 
 const Chart = () => {
   const teamData = [
-    { name: "John", average_income: 2000 },
-    { name: "Jane", average_income: 1500 },
-    { name: "Bob", average_income: 1200 },
-    { name: "Alice", average_income: 500 },
+    { name: "Team 1", average_income: 2000 },
+    { name: "Team 2", average_income: 1500 },
+    { name: "Team 3", average_income: 1200 },
+    { name: "Team 4", average_income: 500 },
 ];
-  return <div className='flex flex-row'>
+  return <div className='flex flex-row gap-5'>
       <MyChart />
       <TeamChart teams={teamData} />
       <style jsx>{`

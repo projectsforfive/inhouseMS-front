@@ -8,11 +8,11 @@ Chart.register(...registerables);
 // Utility functions for generating random data
 const Utils = {
 
-    members: [{ name: "John", income: 7000 }, { name: "Jane", income: 2000 }, { name: "Bob", income: 3000 }, { name: "Alice", income: 4000 }, { name: "Charlie", income: 5000 }, { name: "Dave", income: 6000 }, { name: "Eve", income: 7000 }, { name: "Frank", income: 8000 }, { name: "Grace", income: 9000 },
-    { name: "Heidi", income: 10000 }, { name: "Isabella", income: 11000 }, { name: "Jack", income: 12000 },
-    { name: "Julia", income: 13000 }, { name: "Kate", income: 14000 }, { name: "Liam", income: 15000 }, { name: "Mike", income: 16000 },
-    { name: "Olivia", income: 13000 }, { name: "Peter", income: 18000 }, { name: "Quinn", income: 19000 },
-    { name: "Sarah", income: 30000 }, { name: "Tom", income: 21000 }],
+    members: [{ name: "John", income: 7000 }, { name: "Jane", income: 22000 }, { name: "Bob", income: 7000 }, { name: "Alice", income: 4800 }, { name: "Charlie", income: 35000 }, { name: "Dave", income: 26000 }, { name: "Eve", income: 9000 }, { name: "Frank", income: 8000 }, { name: "Grace", income: 9000 },
+    { name: "Heidi", income: 10000 }, { name: "Isabella", income: 16000 }, { name: "Jack", income: 12000 },
+    { name: "Julia", income: 13000 }, { name: "Kate", income: 14000 }, { name: "Liam", income: 24000 }, { name: "Mike", income: 16000 },
+    { name: "Olivia", income: 13000 }, { name: "Peter", income: 1000 }, { name: "Quinn", income: 19000 },
+    { name: "Sarah", income: 3000 }, { name: "Tom", income: 21000 }],
     CHART_COLORS: {
         red: 'rgba(255, 99, 132, 0.5)',
         blue: '#8C57FF',
