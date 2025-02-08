@@ -26,6 +26,7 @@ import type { Mode } from '@core/types';
 import Link from '@components/Link';
 import Logo from '@components/layout/shared/Logo';
 import Illustrations from '@components/Illustrations';
+import axiosInstance from '@/utils/axios';
 
 // Config Imports
 import themeConfig from '@configs/themeConfig';
@@ -65,12 +66,18 @@ const LoginV2 = ({ mode }: { mode: Mode }) => {
   const handleClickShowPassword = () => setIsPasswordShown(show => !show);
 
   const loginHandle = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
     const email: string = e.currentTarget.email.value;
     const password: string = e.currentTarget.password.value;
-    signInWithEmailAndPassword(auth, email, password)
-      .then((credential: UserCredential) => {
-        window.location.href = '/dashboard'
-      })
+    
+    // signInWithEmailAndPassword(auth, email, password)
+    //   .then((credential: UserCredential) => {
+    //     credential.user.getIdToken().then((token: string) => localStorage.setItem('token', token));
+    //     window.location.href = '/dashboard';
+    //   })
+    //   .catch()
+    
   }
 
   return (
@@ -103,15 +110,12 @@ const LoginV2 = ({ mode }: { mode: Mode }) => {
         <div className='flex flex-col gap-5 is-full sm:is-auto md:is-full sm:max-is-[400px] md:max-is-[unset]'>
           <div>
             <Typography variant='h4'>{`Welcome to ${themeConfig.templateName}!👋🏻`}</Typography>
-            <Typography className='mbs-1'>Please sign-in to your account and start the adventure</Typography>
+            <Typography className='mbs-1'>Please sign-in to your account and start the adventure--------</Typography>
           </div>
           <form
             noValidate
             autoComplete='off'
-            onSubmit={e => {
-              e.preventDefault();
-              router.push('/');
-            }}
+            onSubmit={loginHandle}
             className='flex flex-col gap-5'
           >
             <TextField autoFocus fullWidth label='Email' name='email' type='email' />
@@ -141,12 +145,12 @@ const LoginV2 = ({ mode }: { mode: Mode }) => {
                 Forgot password?
               </Typography>
             </div>
-            <Button fullWidth variant='contained' type='submit' onClick={loginHandle}>
+            <Button fullWidth variant='contained' type='submit'>
               Log In
             </Button>
             <div className='flex justify-center items-center flex-wrap gap-2'>
               <Typography>New on our platform?</Typography>
-              <Typography component={Link} color='primary'>
+              <Typography component={Link} href='/register' color='primary'>
                 Create an account
               </Typography>
             </div>
