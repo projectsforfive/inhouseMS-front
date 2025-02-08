@@ -1,7 +1,7 @@
 'use client';
 
 // React Imports
-import type { ReactElement } from 'react';
+import { useEffect, type ReactElement } from 'react';
 
 // Type Imports
 import type { SystemMode } from '@core/types';
@@ -24,6 +24,10 @@ const LayoutWrapper = (props: LayoutWrapperProps) => {
   const { settings } = useSettings();
 
   useLayoutInit(systemMode);
+
+  useEffect(() => {
+    
+  }, []);
 
   // Return the layout based on the layout context
   return (

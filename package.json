@@ -40,6 +40,7 @@
     "@mui/x-date-pickers-pro": "^7.25.0",
     "@prisma/client": "5.17.0",
     "@reduxjs/toolkit": "^2.5.1",
+    "firebase": "^11.2.0",
     "@tanstack/match-sorter-utils": "8.15.1",
     "@tanstack/react-table": "8.19.3",
     "@tiptap/extension-color": "^2.5.5",

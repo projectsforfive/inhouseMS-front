@@ -59,12 +59,11 @@ const Illustrations = (props: IllustrationsProp) => {
       <>
         {/* Render Image 1 */}
         {typeof image1 === 'undefined' || isImageObj(image1) ? (
-          <Image
-            alt={isImageObj(image1) ? image1.alt || 'Image 1' : 'tree-1'}
-            src={isImageObj(image1) ? image1.src : '/images/illustrations/objects/tree-1.png'}
-            className={isImageObj(image1) ? image1.className : 'absolute inline-start-0 block-end-0'}
-            width={isImageObj(image1) ? image1.width || 200 : 200} // Fallback width
-            height={isImageObj(image1) ? image1.height || 200 : 200} // Fallback height
+          <img
+            alt={image1?.alt || 'tree-1'}
+            src={image1?.src || '/images/illustrations/objects/tree-1.png'}
+            className={image1?.className || 'absolute inline-start-0 block-end-0'}
+            style={{ width: 'auto', height: '200px' }}  
           />
         ) : (
           image1
@@ -84,12 +83,12 @@ const Illustrations = (props: IllustrationsProp) => {
 
         {/* Render Image 2 */}
         {typeof image2 === 'undefined' || isImageObj(image2) ? (
-          <Image
-            alt={isImageObj(image2) ? image2.alt || 'Image 2' : 'tree-2'}
-            src={isImageObj(image2) ? image2.src : '/images/illustrations/objects/tree-2.png'}
-            className={isImageObj(image2) ? image2.className : 'absolute inline-end-0 block-end-0'}
-            width={isImageObj(image2) ? image2.width || 200 : 200} // Fallback width
-            height={isImageObj(image2) ? image2.height || 200 : 200} // Fallback height
+          <img
+            alt={image2?.alt || 'tree-2'}
+            src={image2?.src || '/images/illustrations/objects/tree-2.png'}
+            className={image2?.className || 'absolute inline-end-0 block-end-0'}
+            width={image2?.width}
+            height={image2?.height || 200}
           />
         ) : (
           image2

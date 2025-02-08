@@ -26,6 +26,7 @@ import type { Mode } from '@core/types';
 import Link from '@components/Link';
 import Logo from '@components/layout/shared/Logo';
 import Illustrations from '@components/Illustrations';
+import axiosInstance from '@/utils/axios';
 
 // Config Imports
 import themeConfig from '@configs/themeConfig';
@@ -33,7 +34,9 @@ import themeConfig from '@configs/themeConfig';
 // Hook Imports
 import { useImageVariant } from '@core/hooks/useImageVariant';
 import { useSettings } from '@core/hooks/useSettings';
-import Image from 'next/image';
+
+import { signInWithEmailAndPassword, UserCredential } from 'firebase/auth';
+import { auth } from '@/configs/firebaseConfig'
 
 const LoginV2 = ({ mode }: { mode: Mode }) => {
   // States
@@ -62,6 +65,23 @@ const LoginV2 = ({ mode }: { mode: Mode }) => {
 
   const handleClickShowPassword = () => setIsPasswordShown(show => !show);
 
+  const loginHandle = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const email: string = e.currentTarget.email.value;
+    const password: string = e.currentTarget.password.value;
+    
+    signInWithEmailAndPassword(auth, email, password)
+      .then((credential: UserCredential) => {
+        credential.user.getIdToken().then((token: string) => localStorage.setItem('token', token));
+        window.location.href = '/dashboard';
+      })
+      .catch((err: any) => {
+        
+      })
+    
+  }
+
   return (
     <div className='flex bs-full justify-center'>
       <div
@@ -73,18 +93,18 @@ const LoginV2 = ({ mode }: { mode: Mode }) => {
         )}
       >
         <div className='plb-12 pis-12'>
-          <Image
+          <img
             src={characterIllustration}
             alt='character-illustration'
             className='max-bs-[500px] max-is-full bs-auto'
             
           />
         </div>
-        <Illustrations
-          image1={{ src: '/images/illustrations/objects/tree-2.png' }}
+        {/* <Illustrations
+          image1={{ src: '/tree-3.png' }}
           image2={null}
           maskImg={{ src: authBackground }}
-        />
+        /> */}
       </div>
       <div className='flex justify-center items-center bs-full bg-backgroundPaper !min-is-full p-6 md:!min-is-[unset] md:p-12 md:is-[480px]'>
         <Link className='absolute block-start-5 sm:block-start-[38px] inline-start-6 sm:inline-start-[38px]'>
@@ -98,17 +118,15 @@ const LoginV2 = ({ mode }: { mode: Mode }) => {
           <form
             noValidate
             autoComplete='off'
-            onSubmit={e => {
-              e.preventDefault();
-              router.push('/');
-            }}
+            onSubmit={loginHandle}
             className='flex flex-col gap-5'
           >
-            <TextField autoFocus fullWidth label='Email' />
+            <TextField autoFocus fullWidth label='Email' name='email' type='email' />
             <TextField
               fullWidth
               label='Password'
               type={isPasswordShown ? 'text' : 'password'}
+              name='password'
               InputProps={{
                 endAdornment: (
                   <InputAdornment position='end'>
@@ -135,7 +153,7 @@ const LoginV2 = ({ mode }: { mode: Mode }) => {
             </Button>
             <div className='flex justify-center items-center flex-wrap gap-2'>
               <Typography>New on our platform?</Typography>
-              <Typography component={Link} color='primary'>
+              <Typography component={Link} href='/register' color='primary'>
                 Create an account
               </Typography>
             </div>
