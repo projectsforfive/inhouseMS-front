@@ -14,6 +14,7 @@ const initialState: ProfileState = {
   profile: {
     userName: 'John',
     email: 'john.doe@example.com',
+    gender: 'Male',
     team: ['Team 1'],
     birthday: '1990-01-01',
     language: ['English']
