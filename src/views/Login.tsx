@@ -71,12 +71,12 @@ const LoginV2 = ({ mode }: { mode: Mode }) => {
     const email: string = e.currentTarget.email.value;
     const password: string = e.currentTarget.password.value;
     
-    // signInWithEmailAndPassword(auth, email, password)
-    //   .then((credential: UserCredential) => {
-    //     credential.user.getIdToken().then((token: string) => localStorage.setItem('token', token));
-    //     window.location.href = '/dashboard';
-    //   })
-    //   .catch()
+    signInWithEmailAndPassword(auth, email, password)
+      .then((credential: UserCredential) => {
+        credential.user.getIdToken().then((token: string) => localStorage.setItem('token', token));
+        window.location.href = '/dashboard';
+      })
+      .catch()
     
   }
 
@@ -110,7 +110,7 @@ const LoginV2 = ({ mode }: { mode: Mode }) => {
         <div className='flex flex-col gap-5 is-full sm:is-auto md:is-full sm:max-is-[400px] md:max-is-[unset]'>
           <div>
             <Typography variant='h4'>{`Welcome to ${themeConfig.templateName}!👋🏻`}</Typography>
-            <Typography className='mbs-1'>Please sign-in to your account and start the adventure--------</Typography>
+            <Typography className='mbs-1'>Please sign-in to your account and start the adventure</Typography>
           </div>
           <form
             noValidate

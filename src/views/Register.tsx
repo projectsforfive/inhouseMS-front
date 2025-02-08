@@ -1,7 +1,9 @@
 'use client'
 
+import { db } from '@configs/firebaseConfig'
+import { collection, getDoc, doc } from 'firebase/firestore'
 // React Imports
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 // Next Imports
 import Link from 'next/link'
@@ -14,8 +16,13 @@ import IconButton from '@mui/material/IconButton'
 import InputAdornment from '@mui/material/InputAdornment'
 import Checkbox from '@mui/material/Checkbox'
 import Button from '@mui/material/Button'
+import Select, { SelectChangeEvent } from '@mui/material/Select'
+import InputLabel from '@mui/material/InputLabel'
+import FormControl from '@mui/material/FormControl'
+import MenuItem from '@mui/material/MenuItem'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Divider from '@mui/material/Divider'
+
 
 // Third-party Imports
 import classnames from 'classnames'
@@ -61,6 +68,22 @@ const RegisterV2 = ({ mode }: { mode: Mode }) => {
     borderedLightIllustration,
     borderedDarkIllustration
   )
+
+  const [teams, setTeams] = useState([]);
+  const [team, setTeam] = useState('')
+  useEffect(() => {
+    (async () => {
+      const docRef = doc(db, 'static', 'team-category');
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        const teamCategory = docSnap.data();
+        console.log(teamCategory);
+        setTeams(teamCategory?.main || []);
+      }
+    })();
+  }, [])
+
+  const handleTeamChange = (e: SelectChangeEvent) => setTeam(e.target.value)
 
   const handleClickShowPassword = () => setIsPasswordShown(show => !show)
 
@@ -140,6 +163,19 @@ const RegisterV2 = ({ mode }: { mode: Mode }) => {
                 )
               }}
             />
+            <FormControl variant="outlined" fullWidth>
+              <InputLabel id="demo-simple-select-label">Team</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={team}
+                label="Team"
+                disabled={teams.length === 0}
+                onChange={handleTeamChange}
+              >
+                {teams.map((team: { id: string, title: string }) => <MenuItem value={team.id}>{team.title}</MenuItem>)}
+              </Select>
+            </FormControl>  
             <div className='flex justify-between items-center gap-3'>
               <FormControlLabel
                 control={<Checkbox />}
