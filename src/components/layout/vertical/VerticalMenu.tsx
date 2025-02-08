@@ -20,8 +20,8 @@ import StyledVerticalNavExpandIcon from '@menu/styles/vertical/StyledVerticalNav
 import menuItemStyles from '@core/styles/vertical/menuItemStyles';
 import menuSectionStyles from '@core/styles/vertical/menuSectionStyles';
 
-import { FaAmazonPay } from 'react-icons/fa';
-import { FiCommand } from 'react-icons/fi';
+// import { FaAmazonPay } from 'react-icons/fa';
+// import { FiCommand } from 'react-icons/fi';
 
 type RenderExpandIconProps = {
   open?: boolean;
@@ -74,11 +74,14 @@ const VerticalMenu = ({ scrollMenu }: Props) => {
         <MenuItem href='/dashboard' icon={<i className='ri-home-smile-line' />}>
           Dashboard
         </MenuItem>
-        <MenuItem href='/job-status' icon={<FiCommand />}>
-          Job Status
+        <MenuItem href='/interview' icon={<i className='ri-home-smile-line' />}>
+          Interview
         </MenuItem>
-        <MenuItem href='/payment' icon={<FaAmazonPay />}>
+        <MenuItem href='/payment' icon={<i className='ri-home-smile-line' />}>
           Payment
+        </MenuItem>
+        <MenuItem href='/profile' icon={<i className='ri-home-smile-line' />}>
+          Profile
         </MenuItem>
         <MenuItem href='/about' icon={<i className='ri-information-line' />}>
           About

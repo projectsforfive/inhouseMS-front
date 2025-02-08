@@ -57,6 +57,7 @@ const Illustrations = (props: IllustrationsProp) => {
   if (!hidden) {
     return (
       <>
+        {/* Render Image 1 */}
         {typeof image1 === 'undefined' || isImageObj(image1) ? (
           <img
             alt={image1?.alt || 'tree-1'}
@@ -67,17 +68,20 @@ const Illustrations = (props: IllustrationsProp) => {
         ) : (
           image1
         )}
+
+        {/* Render Mask Image */}
         {typeof maskImg === 'undefined' || isImageObj(maskImg) ? (
           <MaskImg
-            alt={maskImg?.alt || 'mask'}
-            src={maskImg?.src || maskBackground}
-            className={maskImg?.className}
-            width={maskImg?.width}
-            height={maskImg?.height}
+            alt={isImageObj(maskImg) ? maskImg.alt || 'mask' : 'mask'}
+            src={isImageObj(maskImg) ? maskImg.src : maskBackground}
+            className={isImageObj(maskImg) ? maskImg.className : ''}
+            // MaskImg is a styled img and doesn't require width/height props.
           />
         ) : (
           maskImg
         )}
+
+        {/* Render Image 2 */}
         {typeof image2 === 'undefined' || isImageObj(image2) ? (
           <img
             alt={image2?.alt || 'tree-2'}

@@ -10,6 +10,8 @@ module.exports = {
     '@typescript-eslint/ban-ts-comment': 'off',
     '@typescript-eslint/no-non-null-assertion': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
+    '@next/next/no-img-element': 'off',
+    'import/no-unresolved': 'off'
   },
   settings: {
     react: {

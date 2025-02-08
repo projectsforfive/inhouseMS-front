@@ -97,6 +97,7 @@ const LoginV2 = ({ mode }: { mode: Mode }) => {
             src={characterIllustration}
             alt='character-illustration'
             className='max-bs-[500px] max-is-full bs-auto'
+            
           />
         </div>
         {/* <Illustrations
