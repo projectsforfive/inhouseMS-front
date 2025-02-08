@@ -27,6 +27,7 @@ import type { RootState } from '@/redux/index'
 type Data = {
   userName: string,
   email: string,
+  gender: 'Male' | 'Female',
   team: string,
   birthday: string,
   language: string,
@@ -39,7 +40,7 @@ const languageData = ['English', 'Spanish', 'Chinese', 'French', 'German', 'Port
 const AccountDetails: React.FC = () => {
   const dispatch = useDispatch<any>();
   const { profile } = useSelector((state: RootState) => state.profile);
-  const [signal,setSignal] = useState(true)
+  const [signal, setSignal] = useState(true)
 
   useEffect(() => {
     fetchProfile(userId)
@@ -60,6 +61,7 @@ const AccountDetails: React.FC = () => {
   }
 
   const handleFormChange = (field: keyof Data, value: Data[keyof Data]) => {
+    console.log(field, value)
     setFormData({ ...formData, [field]: value })
   }
 
@@ -107,9 +109,9 @@ const AccountDetails: React.FC = () => {
                   id='account-settings-upload-image'
                 />
               </Button>
-              <Button size='small' variant='outlined' color='error' onClick={handleFileInputReset}>
+              {/* <Button size='small' variant='outlined' color='error' onClick={handleFileInputReset}>
                 Reset
-              </Button>
+              </Button> */}
             </div>
             <Typography>Allowed JPG, GIF or PNG. Max size of 800K</Typography>
           </div>
@@ -142,10 +144,26 @@ const AccountDetails: React.FC = () => {
             </Grid>
             <Grid item xs={12} sm={6}>
               <FormControl fullWidth>
+                <InputLabel>Gender</InputLabel>
+                <Select
+                  label='Gender'
+                  value={formData.gender}
+                  disabled={edit}
+                  onChange={e => handleFormChange('gender', e.target.value)}
+                >
+                  <MenuItem value="Male">Male</MenuItem>
+                  <MenuItem value="Female">Female</MenuItem>
+                </Select>
+              </FormControl>
+            </Grid>
+
+            <Grid item xs={12} sm={6}>
+              <FormControl fullWidth>
                 <InputLabel>Team</InputLabel>
                 <Select
                   label='Team'
                   value={formData.team[0]}
+                  disabled={edit}
                   onChange={e => handleFormChange('team', e.target.value)}
                 >
                   {formData.team.map(team => (
@@ -203,15 +221,25 @@ const AccountDetails: React.FC = () => {
                 </Select>
               </FormControl>
             </Grid>
-
-            <Grid item xs={12} className='flex gap-4 flex-wrap'>
-              <Button variant='contained' type='submit'>
+            <Grid item xs={12} sm={6} >
+              <Button variant='contained' className='mr-2' type='submit'>
                 {!edit ? 'Save Changes' : 'Update Profile'}
               </Button>
-              <Button variant='outlined' type='reset' color='secondary' onClick={() => setFormData(profile)}>
+              <Button variant='outlined' type='reset' color='secondary' onClick={() => {setFormData(profile);handleFileInputReset;}}>
                 Reset
               </Button>
             </Grid>
+            <Grid item xs={12} sm={6}>
+              <textarea id="message"  className="block resize-y  p-2.5 w-full text-sm
+            text-gray-900 bg-gray-50 rounded-lg border border-gray-300
+            focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700
+            dark:border-gray-600 dark:placeholder-gray-400 dark:text-white
+            dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            placeholder="Write about yourself ..."
+            />
+            </Grid>
+
+
           </Grid>
         </form>
       </CardContent>
