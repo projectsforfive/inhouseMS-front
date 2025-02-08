@@ -76,7 +76,9 @@ const LoginV2 = ({ mode }: { mode: Mode }) => {
         credential.user.getIdToken().then((token: string) => localStorage.setItem('token', token));
         window.location.href = '/dashboard';
       })
-      .catch()
+      .catch((err: any) => {
+        
+      })
     
   }
 

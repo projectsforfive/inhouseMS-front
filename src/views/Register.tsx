@@ -16,6 +16,7 @@ import IconButton from '@mui/material/IconButton'
 import InputAdornment from '@mui/material/InputAdornment'
 import Checkbox from '@mui/material/Checkbox'
 import Button from '@mui/material/Button'
+import CircularProgress from '@mui/material/CircularProgress'
 import Select, { SelectChangeEvent } from '@mui/material/Select'
 import InputLabel from '@mui/material/InputLabel'
 import FormControl from '@mui/material/FormControl'
@@ -70,7 +71,14 @@ const RegisterV2 = ({ mode }: { mode: Mode }) => {
   )
 
   const [teams, setTeams] = useState([]);
-  const [team, setTeam] = useState('')
+  const [team, setTeam] = useState('');
+  const [loading ,setLoading] = useState(false);
+
+  const [userNameVerificationError, setUserNameVerificationError] = useState<boolean>(false);
+  const [emailVerificationError, setEmailVerificationError] = useState<boolean>(false);
+  const [passwordVerificationError, setPasswordVerificationError] = useState<boolean>(false);
+  const [teamVerificationError, setTeamVerificationError] = useState<boolean>(false);
+
   useEffect(() => {
     (async () => {
       const docRef = doc(db, 'static', 'team-category');
@@ -87,23 +95,53 @@ const RegisterV2 = ({ mode }: { mode: Mode }) => {
 
   const handleClickShowPassword = () => setIsPasswordShown(show => !show)
 
+  const verificationOfForm = (data: { username: string, email: string, password: string, teamId: string }): boolean =>  {
+    console.log(data);
+    const { username, email, password, teamId } = data;
+    let res = true;
+    if (!username) {
+      setUserNameVerificationError(true);
+      res = false;
+    }
+    if (!email) {
+      setEmailVerificationError(true);
+      res = false;
+    }
+    if (!password) {
+      setPasswordVerificationError(true);
+      res = false;
+    }
+    if (!teamId) {
+      setTeamVerificationError(true);
+      res = false;
+    }
+    return res;
+  }
+
   const onRegisterHandle = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     
     const username: string = e.currentTarget.username.value;
     const email: string = e.currentTarget.email.value;
     const password: string = e.currentTarget.password.value;
+    const teamId: string = e.currentTarget.team.value
+
+    if (!verificationOfForm({ username, email, password, teamId })) {
+      return;
+    }
+
+    setLoading(true);
 
     createUserWithEmailAndPassword(auth, email, password)
       .then((credential: UserCredential) => {
-        console.log(credential);
         sendEmailVerification(credential.user);
+        setLoading(false);
         window.location.href='/login'
       }).catch(() => {
-
+        setLoading(false);
       })
   }
-
+  console.log(teamVerificationError)
   return (
     <div className='flex bs-full justify-center'>
       <div
@@ -142,40 +180,54 @@ const RegisterV2 = ({ mode }: { mode: Mode }) => {
             <Typography className='mbe-1'>Make your app management easy and fun!</Typography>
           </div>
           <form noValidate autoComplete='off' onSubmit={onRegisterHandle} className='flex flex-col gap-5'>
-            <TextField autoFocus fullWidth label='Username' name='username' />
-            <TextField fullWidth label='Email' name='email' />
-            <TextField name='password'
-              fullWidth
-              label='Password'
-              type={isPasswordShown ? 'text' : 'password'}
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position='end'>
-                    <IconButton
-                      size='small'
-                      edge='end'
-                      onClick={handleClickShowPassword}
-                      onMouseDown={e => e.preventDefault()}
-                    >
-                      <i className={isPasswordShown ? 'ri-eye-off-line' : 'ri-eye-line'} />
-                    </IconButton>
-                  </InputAdornment>
-                )
-              }}
-            />
-            <FormControl variant="outlined" fullWidth>
-              <InputLabel id="demo-simple-select-label">Team</InputLabel>
-              <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={team}
-                label="Team"
-                disabled={teams.length === 0}
-                onChange={handleTeamChange}
-              >
-                {teams.map((team: { id: string, title: string }) => <MenuItem value={team.id}>{team.title}</MenuItem>)}
-              </Select>
-            </FormControl>  
+            <div>
+              <TextField autoFocus fullWidth label='Username' name='username' />
+              { userNameVerificationError && <div className='text-red-500 text-sm'>User Name field is required to be filled.</div> }
+            </div>
+            <div>
+              <TextField fullWidth label='Email' name='email' />
+              { emailVerificationError && <div className='text-red-500 text-sm'>Email field is required to be filled.</div> }
+            </div>
+            <div>
+              <TextField name='password'
+                fullWidth
+                label='Password'
+                type={isPasswordShown ? 'text' : 'password'}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position='end'>
+                      <IconButton
+                        size='small'
+                        edge='end'
+                        onClick={handleClickShowPassword}
+                        onMouseDown={e => e.preventDefault()}
+                      >
+                        <i className={isPasswordShown ? 'ri-eye-off-line' : 'ri-eye-line'} />
+                      </IconButton>
+                    </InputAdornment>
+                  )
+                }}
+              />
+              { passwordVerificationError && <div className='text-red-500 text-sm'>Password field is required to be filled.</div> }
+            </div>
+            <div>
+              <FormControl variant="outlined" fullWidth>
+                <InputLabel id="demo-simple-select-label">Team</InputLabel>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  name="team"
+                  value={team}
+                  label="Team"
+                  disabled={teams.length === 0}
+                  onChange={handleTeamChange}
+                >
+                  <MenuItem value=''>Please Select Team</MenuItem>
+                  {teams.map((team: { id: string, title: string }) => <MenuItem key={team.id} value={team.id}>{team.title}</MenuItem>)}
+                </Select>
+              </FormControl>  
+              { teamVerificationError && <div className='text-red-500 text-sm'>Team is required to be selected.</div> }
+            </div>
             <div className='flex justify-between items-center gap-3'>
               <FormControlLabel
                 control={<Checkbox />}
@@ -189,8 +241,14 @@ const RegisterV2 = ({ mode }: { mode: Mode }) => {
                 }
               />
             </div>
-            <Button fullWidth variant='contained' type='submit'>
+            <Button fullWidth variant='contained' type='submit' disabled={loading}>
               Sign Up
+              {loading && (
+                <CircularProgress 
+                  size={24} 
+                  style={{ position: 'absolute', left: '50%', top: '50%', marginLeft: '-12px', marginTop: '-12px' }} 
+                />
+              )}
             </Button>
             <div className='flex justify-center items-center flex-wrap gap-2'>
               <Typography>Already have an account?</Typography>
