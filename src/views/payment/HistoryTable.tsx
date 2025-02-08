@@ -118,7 +118,8 @@ const HistoryListTable = ({ tableData }: { tableData?: PaymentType[] }) => {
     const [openPaymentRequestDrawer, setOpenPaymentRequestDrawer] = useState(false)
     const [rowSelection, setRowSelection] = useState({})
     const [editData, setEditData] = useState({})
-    const [filteredData, setFilteredData] = useState(tableData)
+    const filteredData = tableData
+    // const [filteredData, setFilteredData] = useState(tableData)
     const [globalFilter, setGlobalFilter] = useState('')
 
     // Date Range Picker

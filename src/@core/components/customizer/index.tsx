@@ -44,7 +44,7 @@ import styles from './styles.module.css';
 
 type CustomizerProps = {
   breakpoint?: Breakpoint | 'xxl' | `${number}px` | `${number}rem` | `${number}em`;
-  // dir?: Direction;
+  dir?: Direction;
   disableDirection?: boolean;
 };
 
